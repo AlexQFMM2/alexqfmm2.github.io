@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="回溯算法一、什么是回溯算法？通过递归来实现的一个纯暴力算法 二、使用场景是什么？组合 排列 切割 子集 棋盘 三、回溯的模板123456789101112void backtracking（参数）&amp;#123;	if(终止条件)&amp;#123;		收集结果		return;	&amp;#125;	for(集合元素)&amp;#123;		处理结点；		递归函数；		回溯处理；	&amp;#125;	return ；&amp;#125;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="回溯算法">
+<meta property="og:url" content="http://example.com/2024/03/10/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="AlexHome">
+<meta property="og:description" content="回溯算法一、什么是回溯算法？通过递归来实现的一个纯暴力算法 二、使用场景是什么？组合 排列 切割 子集 棋盘 三、回溯的模板123456789101112void backtracking（参数）&amp;#123;	if(终止条件)&amp;#123;		收集结果		return;	&amp;#125;	for(集合元素)&amp;#123;		处理结点；		递归函数；		回溯处理；	&amp;#125;	return ；&amp;#125;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-03-10T16:28:45.000Z">
+<meta property="article:modified_time" content="2024-03-25T10:01:23.100Z">
+<meta property="article:author" content="AlexQFMM">
+<meta property="article:tag" content="力扣">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2024/03/10/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>回溯算法 | AlexHome</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AlexHome</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>留言</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/10/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Avatar.jpg">
+      <meta itemprop="name" content="AlexQFMM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlexHome">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          回溯算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-03-10 16:28:45" itemprop="dateCreated datePublished" datetime="2024-03-10T16:28:45+00:00">2024-03-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-03-25 10:01:23" itemprop="dateModified" datetime="2024-03-25T10:01:23+00:00">2024-03-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8A%9B%E6%89%A3/" itemprop="url" rel="index"><span itemprop="name">力扣</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/03/10/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/" class="post-meta-item leancloud_visitors" data-flag-title="回溯算法" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/03/10/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/03/10/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="回溯算法"><a href="#回溯算法" class="headerlink" title="回溯算法"></a>回溯算法</h1><h2 id="一、什么是回溯算法？"><a href="#一、什么是回溯算法？" class="headerlink" title="一、什么是回溯算法？"></a>一、什么是回溯算法？</h2><p>通过递归来实现的一个纯暴力算法</p>
+<h2 id="二、使用场景是什么？"><a href="#二、使用场景是什么？" class="headerlink" title="二、使用场景是什么？"></a>二、使用场景是什么？</h2><p>组合</p>
+<p>排列</p>
+<p>切割</p>
+<p>子集</p>
+<p>棋盘</p>
+<h2 id="三、回溯的模板"><a href="#三、回溯的模板" class="headerlink" title="三、回溯的模板"></a>三、回溯的模板</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void backtracking（参数）&#123;</span><br><span class="line">	if(终止条件)&#123;</span><br><span class="line">		收集结果</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line">	for(集合元素)&#123;</span><br><span class="line">		处理结点；</span><br><span class="line">		递归函数；</span><br><span class="line">		回溯处理；</span><br><span class="line">	&#125;</span><br><span class="line">	return ；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="四、实战"><a href="#四、实战" class="headerlink" title="四、实战"></a>四、实战</h2><h3 id="1、力扣-77组合"><a href="#1、力扣-77组合" class="headerlink" title="1、力扣 77组合"></a>1、力扣 77组合</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">给定两个整数 n 和 k，返回范围 [1, n] 中所有可能的 k 个数的组合。</span><br><span class="line"></span><br><span class="line">你可以按 任何顺序 返回答案。</span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：n = 4, k = 2</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">需要一个一维数组存放每次的组合 path[]；</span><br><span class="line">需要一个二维数组存放所有的组合结果 ans[][];</span><br><span class="line">path和ans做全局变量</span><br><span class="line"></span><br><span class="line">需要一个总数 n，一个组合的大小 k</span><br><span class="line">需要一个每次递归的起始坐标，start_index</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">path是我们存放每次组合结果的数组，如果path存放的数据已经达到了我们预期的组合大小K，那就可以存储结果然后返回了</span><br><span class="line">也就是</span><br><span class="line">if(path.size()==k) &#123;</span><br><span class="line">	ans.push(path);</span><br><span class="line">	return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">每次循环的开始必然是start_index，不能超过集合的元素数量 n,每次i++</span><br><span class="line">将每个元素依次放入path中，递归调用下一个元素进行组合，最后别忘记回溯</span><br><span class="line">也就是</span><br><span class="line">	for(int i=start_index;i&lt;n;i++)&#123;</span><br><span class="line">		path.push(i);</span><br><span class="line">		backtracking(n,k,i+1);</span><br><span class="line">		path.pop();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; ans;//二维数组</span><br><span class="line">    vector&lt;int&gt; path;//一维数组</span><br><span class="line">    void backtracking(int n,int k,int start_index)&#123;</span><br><span class="line">        if(path.size() == k)&#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        for(int i=start_index;i&lt;=n;i++)&#123;</span><br><span class="line">            path.push_back(i);</span><br><span class="line">            backtracking(n,k,i+1);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; combine(int n, int k) &#123;</span><br><span class="line">        backtracking(n,k,1);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>剪枝优化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for(int i=start_index;i&lt;=n;i++) -&gt;for(int i=start_index;i&lt;=n-(k-path.size())+1;i++)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">path.size() -&gt;已经找到的元素个数</span><br><span class="line">k-path.size() -&gt;还需要寻找的元素个数</span><br><span class="line">当前的下标是i</span><br><span class="line">数组内剩余的元素数量 -&gt; n-i+1；</span><br><span class="line">n-i+1 &gt;= k-path.size()</span><br><span class="line">n-(k-path.size())+1 &gt;=i</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、力扣-216-组合总和Ⅲ（完全不重复）"><a href="#2、力扣-216-组合总和Ⅲ（完全不重复）" class="headerlink" title="2、力扣 216 组合总和Ⅲ（完全不重复）"></a>2、力扣 216 组合总和Ⅲ（完全不重复）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">找出所有相加之和为 n 的 k 个数的组合，且满足下列条件：</span><br><span class="line"></span><br><span class="line">只使用数字1到9</span><br><span class="line">每个数字 最多使用一次 </span><br><span class="line">返回 所有可能的有效组合的列表 。该列表不能包含相同的组合两次，组合可以以任何顺序返回。</span><br><span class="line"></span><br><span class="line">输入: k = 3, n = 7</span><br><span class="line">输出: [[1,2,4]]</span><br><span class="line">解释:</span><br><span class="line">1 + 2 + 4 = 7</span><br><span class="line">没有其他符合的组合了。</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">需要一个一维数组存放每次的组合 path[]；</span><br><span class="line">需要一个二维数组存放所有的组合结果 ans[][];</span><br><span class="line">path和ans做全局变量</span><br><span class="line"></span><br><span class="line">需要一个目标值 n，一个组合的大小 k</span><br><span class="line">需要一个每次递归的起始坐标，start_index</span><br><span class="line">需要一个遍历范围 size</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">path是我们存放每次组合结果的数组，如果path存放的数据已经达到了我们预期的组合大小K，并且path里数据的总和 sum等于我们的目标值 那就可以存储结果然后返回了</span><br><span class="line">也就是</span><br><span class="line"> if(path.size() == k)&#123;</span><br><span class="line">            int sum=0;</span><br><span class="line">            for(int i : path)&#123;</span><br><span class="line">                sum +=i;</span><br><span class="line">            &#125;</span><br><span class="line">            if(sum == n) ans.push_back(path);</span><br><span class="line">            return;           </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">每次循环的开始必然是start_index，不能超过集合的元素数量 n,每次i++</span><br><span class="line">将每个元素依次放入path中，递归调用下一个元素进行组合，最后别忘记回溯</span><br><span class="line">也就是</span><br><span class="line">	for(int i=start_index;i&lt;size;i++)&#123;</span><br><span class="line">		path.push(i);</span><br><span class="line">		backtracking(n,k,i+1,10);</span><br><span class="line">		path.pop();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    vector&lt;int&gt; path;</span><br><span class="line"></span><br><span class="line">    void backtracking(int n,int k,int start_index,int size)&#123;</span><br><span class="line">        if(path.size() == k)&#123;</span><br><span class="line">            int sum=0;</span><br><span class="line">            for(int i : path)&#123;</span><br><span class="line">                sum +=i;</span><br><span class="line">            &#125;</span><br><span class="line">            if(sum == n) ans.push_back(path);</span><br><span class="line">            return;           </span><br><span class="line">        &#125;</span><br><span class="line">        for(int i=start_index;i&lt;size;i++)&#123;</span><br><span class="line">                path.push_back(i);</span><br><span class="line">                backtracking(n,k,i+1,10);</span><br><span class="line">                path.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; combinationSum3(int k, int n) &#123;</span><br><span class="line">        backtracking(n,k,1,10);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、力扣-17-电话号码的组合"><a href="#3、力扣-17-电话号码的组合" class="headerlink" title="3、力扣 17 电话号码的组合"></a>3、力扣 17 电话号码的组合</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。</span><br><span class="line"></span><br><span class="line">给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：digits = &quot;23&quot;</span><br><span class="line">输出：[&quot;ad&quot;,&quot;ae&quot;,&quot;af&quot;,&quot;bd&quot;,&quot;be&quot;,&quot;bf&quot;,&quot;cd&quot;,&quot;ce&quot;,&quot;cf&quot;]</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：digits = &quot;&quot;</span><br><span class="line">输出：[]</span><br><span class="line">示例 3：</span><br><span class="line"></span><br><span class="line">输入：digits = &quot;2&quot;</span><br><span class="line">输出：[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">需要一个Map存储数字和字符串的映射关系</span><br><span class="line">需要一个字符串存放每次的组合 path；</span><br><span class="line">需要一个字符串数组存放所有的组合结果 vector&lt;string&gt; ans;</span><br><span class="line">path和ans做全局变量</span><br><span class="line"></span><br><span class="line">需要一个目标值 digits，坐标index</span><br><span class="line">由于本题是求多个集合的组合，所以index可以重复</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">path是我们存放每次组合结果的数组，如果path存放的数据已经达到了我们预期的组合大小digits.size()，那就可以存储结果然后返回了</span><br><span class="line">也就是</span><br><span class="line">if(digits.size() == index)&#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">先把需要循环的字符串取出来 -&gt;string s2 = strmap[(digits[index] -&#x27;0&#x27;)];</span><br><span class="line">直接for遍历字符串中的每一个元素即可</span><br><span class="line">for(int i=0;i&lt;s2.size();i++)&#123;</span><br><span class="line">            path +=s2[i];</span><br><span class="line">            backtracking(digits,index+1);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    string strmap[10]=&#123;&quot;&quot;,&quot;&quot;,&quot;abc&quot;,&quot;def&quot;,&quot;ghi&quot;,&quot;jkl&quot;,&quot;mno&quot;,&quot;pqrs&quot;,&quot;tuv&quot;,&quot;wxyz&quot;&#125;;</span><br><span class="line">    string path;</span><br><span class="line">    vector&lt;string&gt; ans;</span><br><span class="line"></span><br><span class="line">    void backtracking(string digits,int index)&#123;</span><br><span class="line">        if(digits.size() == index)&#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        string s2 = strmap[(digits[index] -&#x27;0&#x27;)];</span><br><span class="line"></span><br><span class="line">        for(int i=0;i&lt;s2.size();i++)&#123;</span><br><span class="line">            path +=s2[i];</span><br><span class="line">            backtracking(digits,index+1);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    vector&lt;string&gt; letterCombinations(string digits) &#123;</span><br><span class="line">        if(digits.size())</span><br><span class="line">            backtracking(digits,0);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、力扣-39-组合排序（同一个元素可被重复）"><a href="#4、力扣-39-组合排序（同一个元素可被重复）" class="headerlink" title="4、力扣 39 组合排序（同一个元素可被重复）"></a>4、力扣 39 组合排序（同一个元素可被重复）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。</span><br><span class="line"></span><br><span class="line">candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。 </span><br><span class="line"></span><br><span class="line">对于给定的输入，保证和为 target 的不同组合数少于 150 个。</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：candidates = [2,3,6,7], target = 7</span><br><span class="line">输出：[[2,2,3],[7]]</span><br><span class="line">解释：</span><br><span class="line">2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。</span><br><span class="line">7 也是一个候选， 7 = 7 。</span><br><span class="line">仅有这两种组合。</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入: candidates = [2,3,5], target = 8</span><br><span class="line">输出: [[2,2,2,2],[2,3,3],[3,5]]</span><br><span class="line">示例 3：</span><br><span class="line"></span><br><span class="line">输入: candidates = [2], target = 1</span><br><span class="line">输出: []</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">首先是需要一个存放结果的二维数组 和 一个存放当前结果的一维数组</span><br><span class="line">-》vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    vector&lt;int&gt; path;</span><br><span class="line">需要将原来数组和目标值传过来（我这多传一个数组长度）</span><br><span class="line">需要一个坐标记录</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">当path里面的sum值和需要的target相同时，就可以返回了</span><br><span class="line">为了减少运行时间，在累加时就可以判断sum是否大于target了</span><br><span class="line">int sum=0;</span><br><span class="line">        for(int i : path)&#123;</span><br><span class="line">            sum+=i;</span><br><span class="line">            if(sum &gt;target ) return;</span><br><span class="line">        &#125;</span><br><span class="line">        if(sum == target)&#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">因为可以反复使用同一个元素，所以这里的start_index不需要加一</span><br><span class="line">for(int i=start_index;i&lt;n;i++)&#123;</span><br><span class="line">            path.push_back(candidates[i]);</span><br><span class="line">            backtracting(candidates,i,n,target);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    vector&lt;int&gt; path;</span><br><span class="line">    </span><br><span class="line">    void backtracting(vector&lt;int&gt;&amp; candidates,int start_index,int n,int target)&#123;</span><br><span class="line">        int sum=0;</span><br><span class="line">        for(int i : path)&#123;</span><br><span class="line">            sum+=i;</span><br><span class="line">            if(sum &gt;target ) return;</span><br><span class="line">        &#125;</span><br><span class="line">        if(sum == target)&#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        for(int i=start_index;i&lt;n;i++)&#123;</span><br><span class="line">            path.push_back(candidates[i]);</span><br><span class="line">            backtracting(candidates,i,n,target);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; combinationSum(vector&lt;int&gt;&amp; candidates, int target) &#123;</span><br><span class="line">        backtracting(candidates,0,candidates.size(),target);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5、力扣-40-组合排序-Ⅱ（有重复元素但不能重复使用）"><a href="#5、力扣-40-组合排序-Ⅱ（有重复元素但不能重复使用）" class="headerlink" title="5、力扣 40  组合排序 Ⅱ（有重复元素但不能重复使用）"></a>5、力扣 40  组合排序 Ⅱ（有重复元素但不能重复使用）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">给定一个候选人编号的集合 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。</span><br><span class="line"></span><br><span class="line">candidates 中的每个数字在每个组合中只能使用 一次 。</span><br><span class="line"></span><br><span class="line">注意：解集不能包含重复的组合。 </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: candidates = [10,1,2,7,6,1,5], target = 8,</span><br><span class="line">输出:</span><br><span class="line">[</span><br><span class="line">[1,1,6],</span><br><span class="line">[1,2,5],</span><br><span class="line">[1,7],</span><br><span class="line">[2,6]</span><br><span class="line">]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: candidates = [2,5,2,1,2], target = 5,</span><br><span class="line">输出:</span><br><span class="line">[</span><br><span class="line">[1,2,2],</span><br><span class="line">[5]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">首先是需要一个存放结果的二维数组 和 一个存放当前结果的一维数组</span><br><span class="line">-》vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    vector&lt;int&gt; path;</span><br><span class="line">需要将原来数组和目标值传过来（我这多传一个数组长度）</span><br><span class="line">需要一个坐标记录</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">当path里面的sum值和需要的target相同时，就可以返回了</span><br><span class="line">为了减少运行时间，在累加时就可以判断sum是否大于target了</span><br><span class="line">int sum=0;</span><br><span class="line">        for(int i : path)&#123;</span><br><span class="line">            sum+=i;</span><br><span class="line">            if(sum &gt;target ) return;</span><br><span class="line">        &#125;</span><br><span class="line">        if(sum == target)&#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">去重的关键在于如果递归过来的元素下标不等于当前元素下标，但是数值相等，那就直接continue；</span><br><span class="line">for(int i=start_index;i&lt;n;i++)&#123;</span><br><span class="line">			if(i&gt;start_index &amp;&amp; candidates[i] == candidates[i-1]) continue;</span><br><span class="line">            path.push_back(candidates[i]);</span><br><span class="line">            backtracting(candidates,i,n,target);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    vector&lt;int&gt; path;</span><br><span class="line"></span><br><span class="line">    void backtracking(vector&lt;int&gt;&amp; candidates, int target,int n,int start_index)&#123;</span><br><span class="line">        int sum = 0;</span><br><span class="line">        for(int i:path)&#123;</span><br><span class="line">            sum+=i;</span><br><span class="line">            if(sum &gt; target) return;</span><br><span class="line">        &#125;</span><br><span class="line">        if(sum == target) &#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        for(int i=start_index;i&lt;n;i++)&#123;</span><br><span class="line">            if(i&gt;start_index &amp;&amp; candidates[i] == candidates[i-1]) continue;</span><br><span class="line">            path.push_back(candidates[i]); </span><br><span class="line">            backtracking(candidates,target,n,i+1);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; combinationSum2(vector&lt;int&gt;&amp; candidates, int target) &#123;</span><br><span class="line">        sort(candidates.begin(),candidates.end());</span><br><span class="line">        backtracking(candidates,target,candidates.size(),0);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6、力扣-131-分割回文串"><a href="#6、力扣-131-分割回文串" class="headerlink" title="6、力扣 131 分割回文串"></a>6、力扣 131 分割回文串</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 </span><br><span class="line">回文串</span><br><span class="line"> 。返回 s 所有可能的分割方案。</span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：s = &quot;aab&quot;</span><br><span class="line">输出：[[&quot;a&quot;,&quot;a&quot;,&quot;b&quot;],[&quot;aa&quot;,&quot;b&quot;]]</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：s = &quot;a&quot;</span><br><span class="line">输出：[[&quot;a&quot;]]</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">首先是需要一个存放结果的二维数组 和 一个存放当前结果的一维数组</span><br><span class="line">-》vector&lt;vector&lt;string&gt;&gt; ans;</span><br><span class="line">    vector&lt;string&gt; path;</span><br><span class="line">要一个字符串和起始坐标</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当起始坐标大于字符串长度时结束</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在本题中，我们需要将起始坐标想象成分割线。子串就是 起始坐标到i的这段距离</span><br><span class="line">然后进行判定，如果他是回文串我才需要将它进行递归，回溯</span><br><span class="line">所以要有个check</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;string&gt;&gt; ans;</span><br><span class="line">    vector&lt;string&gt; path;</span><br><span class="line"></span><br><span class="line">   bool check(string&amp; s, int left, int right)&#123;</span><br><span class="line">        while(left &lt;= right)&#123;</span><br><span class="line">            if(s[left++] != s[right--])&#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">   &#125;</span><br><span class="line">    void backtracking(string s,int n,int start_index)&#123;</span><br><span class="line">        if(start_index &gt;=n )&#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        for(int i=start_index;i&lt;n;i++)&#123;</span><br><span class="line">            if(check(s,start_index,i))&#123;</span><br><span class="line">                string sub_str = s.substr(start_index,i-start_index+1);</span><br><span class="line">                path.push_back(sub_str);</span><br><span class="line">                backtracking(s,n,i+1);</span><br><span class="line">                path.pop_back();</span><br><span class="line">            &#125;           </span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    vector&lt;vector&lt;string&gt;&gt; partition(string s) &#123;</span><br><span class="line">        backtracking(s,s.size(),0);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7、力扣-93-复原ip地址"><a href="#7、力扣-93-复原ip地址" class="headerlink" title="7、力扣 93  复原ip地址"></a>7、力扣 93  复原ip地址</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">有效 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 &#x27;.&#x27; 分隔。</span><br><span class="line"></span><br><span class="line">例如：&quot;0.1.2.201&quot; 和 &quot;192.168.1.1&quot; 是 有效 IP 地址，但是 &quot;0.011.255.245&quot;、&quot;192.168.1.312&quot; 和 &quot;192.168@1.1&quot; 是 无效 IP 地址。</span><br><span class="line">给定一个只包含数字的字符串 s ，用以表示一个 IP 地址，返回所有可能的有效 IP 地址，这些地址可以通过在 s 中插入 &#x27;.&#x27; 来形成。你 不能 重新排序或删除 s 中的任何数字。你可以按 任何 顺序返回答案。</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：s = &quot;25525511135&quot;</span><br><span class="line">输出：[&quot;255.255.11.135&quot;,&quot;255.255.111.35&quot;]</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：s = &quot;0000&quot;</span><br><span class="line">输出：[&quot;0.0.0.0&quot;]</span><br><span class="line">示例 3：</span><br><span class="line"></span><br><span class="line">输入：s = &quot;101023&quot;</span><br><span class="line">输出：[&quot;1.0.10.23&quot;,&quot;1.0.102.3&quot;,&quot;10.1.0.23&quot;,&quot;10.10.2.3&quot;,&quot;101.0.2.3&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">需要有个存放当前ip的字符串 ip</span><br><span class="line">需要有个存放所有合法ip的数组，作为答案 result</span><br><span class="line">为了便于判定结束，可以传一个sectionNum作为计ip段数</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当ip段数为4段并且startindex已经遍历到字符串S结尾 可以存放到result中了</span><br><span class="line">不管合不合法，到4段都需要return；</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">因为ip位数最大只有3位，除了i&lt;s.size()以外可以用i &lt; startIndex + 3提前结束循环</span><br><span class="line">分割的子串就是从startindex到 i -&gt;(startIndex, i - startIndex + 1)</span><br><span class="line">如果子串合法的话就把它加到ip中去</span><br><span class="line"></span><br><span class="line">先记录ip当前的大小，方便后续回溯</span><br><span class="line">将合法子串加入ip中，只要段数还没有达到4段，就在末尾加.（因为是从0开始，所以 &lt;3）</span><br><span class="line">开始递归，同时段数要加加</span><br><span class="line">根据之前记录的len回溯ip</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;string&gt; result;</span><br><span class="line">    string ip;</span><br><span class="line">    vector&lt;string&gt; restoreIpAddresses(string s) &#123;</span><br><span class="line">        backtrack(s, 0, 0);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    void backtrack(const string&amp; s, int startIndex, int sectionNum) &#123;</span><br><span class="line">        if (sectionNum == 4) &#123;</span><br><span class="line">            if (startIndex == s.length()) &#123;</span><br><span class="line">                result.push_back(ip);</span><br><span class="line">            &#125;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        for (int i = startIndex; i &lt; startIndex + 3 &amp;&amp; i&lt;s.size(); i++) &#123;</span><br><span class="line">            string section = s.substr(startIndex, i - startIndex + 1);</span><br><span class="line">            if (isValidSection(section)) &#123;</span><br><span class="line">                int len = ip.size();         </span><br><span class="line">                ip += section;</span><br><span class="line">                if (sectionNum &lt; 3) &#123;</span><br><span class="line">                    ip += &quot;.&quot;;</span><br><span class="line">                &#125;</span><br><span class="line">                backtrack(s, i + 1, sectionNum + 1);</span><br><span class="line">                ip.resize(len);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    bool isValidSection(const string&amp; section) &#123;</span><br><span class="line">        int len = section.length();</span><br><span class="line">        if (len == 0 || len &gt; 3) &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        if (len &gt; 1 &amp;&amp; section[0] == &#x27;0&#x27;) &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        int num = 0;</span><br><span class="line">        for (int i = 0; i &lt; len; i++) &#123;</span><br><span class="line">            char c = section[i];</span><br><span class="line">            </span><br><span class="line">            if (c &lt; &#x27;0&#x27; || c &gt; &#x27;9&#x27;) &#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;          </span><br><span class="line">            num = num * 10 + (c - &#x27;0&#x27;);</span><br><span class="line">            if (num &gt; 255) &#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8、力扣-78-子集"><a href="#8、力扣-78-子集" class="headerlink" title="8、力扣 78  子集"></a>8、力扣 78  子集</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的</span><br><span class="line">子集</span><br><span class="line">（幂集）。</span><br><span class="line"></span><br><span class="line">解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：nums = [1,2,3]</span><br><span class="line">输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：nums = [0]</span><br><span class="line">输出：[[],[0]]</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">需要一个记录当前路径的path</span><br><span class="line">需要一个记录所有子集的ans</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">子集和组合不同，组合是只有叶子结点上的结果是我们需要的，而子集是每一条分支</span><br><span class="line">所以终止条件位if(start_index == nums.size()) return;</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">没啥好说的老一套即可</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    vector&lt;int&gt;path;</span><br><span class="line">    void backtracking(vector&lt;int&gt;&amp; nums,int start_index)&#123;</span><br><span class="line">        ans.push_back(path);</span><br><span class="line">        //if(start_index == nums.size()) return;</span><br><span class="line">        for(int i=start_index;i&lt;nums.size();i++)&#123;</span><br><span class="line">            path.push_back(nums[i]);</span><br><span class="line">            backtracking(nums,i+1);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; subsets(vector&lt;int&gt;&amp; nums) &#123;</span><br><span class="line">        backtracking(nums,0);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="9、力扣-90-子集Ⅱ"><a href="#9、力扣-90-子集Ⅱ" class="headerlink" title="9、力扣 90 子集Ⅱ"></a>9、力扣 90 子集Ⅱ</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">90. 子集 II</span><br><span class="line">已解答</span><br><span class="line">中等</span><br><span class="line">相关标签</span><br><span class="line">相关企业</span><br><span class="line">给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的&lt;span data-keyword=&quot;subset&quot;&gt;子集&lt;/span&gt;（幂集）。</span><br><span class="line"></span><br><span class="line">解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：nums = [1,2,2]</span><br><span class="line">输出：[[],[1],[1,2],[1,2,2],[2],[2,2]]</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：nums = [0]</span><br><span class="line">输出：[[],[0]]</span><br></pre></td></tr></table></figure>
+
+<p>题解：和第5题类似，主要关键在于去重</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;int&gt; path;</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    void backtracking(vector&lt;int&gt;&amp; nums,int start_index)&#123;</span><br><span class="line">        ans.push_back(path);</span><br><span class="line"></span><br><span class="line">        for(int i=start_index;i&lt;nums.size();i++)&#123;</span><br><span class="line">            if(i&gt;start_index &amp;&amp; nums[i] == nums[i-1]) continue;</span><br><span class="line">            path.push_back(nums[i]);</span><br><span class="line">            backtracking(nums,i+1);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; subsetsWithDup(vector&lt;int&gt;&amp; nums) &#123;</span><br><span class="line">        sort(nums.begin(),nums.end());</span><br><span class="line">        backtracking(nums,0);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="10、力扣-491-非递减序列"><a href="#10、力扣-491-非递减序列" class="headerlink" title="10、力扣 491 非递减序列"></a>10、力扣 491 非递减序列</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">491. 非递减子序列</span><br><span class="line">已解答</span><br><span class="line">中等</span><br><span class="line">相关标签</span><br><span class="line">相关企业</span><br><span class="line">给你一个整数数组 nums ，找出并返回所有该数组中不同的递增子序列，递增子序列中 至少有两个元素 。你可以按 任意顺序 返回答案。</span><br><span class="line"></span><br><span class="line">数组中可能含有重复元素，如出现两个整数相等，也可以视作递增序列的一种特殊情况。</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：nums = [4,6,7,7]</span><br><span class="line">输出：[[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：nums = [4,4,3,2,1]</span><br><span class="line">输出：[[4,4]]</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">需要一个记录当前路径的path</span><br><span class="line">需要一个记录所有子集的ans</span><br><span class="line">由于顺序不能乱但又需要避免重复，必须采用无序表来记录是否被访问过 unordered_map</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果已经有两个元素以上就加入ans</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如果当前访问的元素小于path中最后一个元素，直接continue</span><br><span class="line">如果当前访问的元素已经存在与mao中，也直接continue</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    vector&lt;int&gt; path;</span><br><span class="line">    </span><br><span class="line">    void backtracking(vector&lt;int&gt;&amp; nums, int start_index) &#123;</span><br><span class="line">        if (path.size() &gt;= 2) &#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        // 使用 set 来记录当前层级已经遍历过的元素，避免重复</span><br><span class="line">        unordered_set&lt;int&gt; visited;</span><br><span class="line">        </span><br><span class="line">        for (int i = start_index; i &lt; nums.size(); ++i) &#123;</span><br><span class="line">            // 如果当前元素已经在本层级遍历过，则跳过</span><br><span class="line">            if (visited.count(nums[i])) continue;</span><br><span class="line">            </span><br><span class="line">            // 如果当前元素大于等于当前路径的最后一个元素，则将其加入当前路径</span><br><span class="line">            if (path.empty() || nums[i] &gt;= path.back()) &#123;</span><br><span class="line">                visited.insert(nums[i]);  // 记录已经遍历过的元素</span><br><span class="line">                path.push_back(nums[i]);</span><br><span class="line">                backtracking(nums, i + 1);</span><br><span class="line">                path.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; findSubsequences(vector&lt;int&gt;&amp; nums) &#123;</span><br><span class="line">        backtracking(nums, 0);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="11、力扣-46-全排列"><a href="#11、力扣-46-全排列" class="headerlink" title="11、力扣 46 全排列"></a>11、力扣 46 全排列</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。</span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：nums = [1,2,3]</span><br><span class="line">输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：nums = [0,1]</span><br><span class="line">输出：[[0,1],[1,0]]</span><br><span class="line">示例 3：</span><br><span class="line"></span><br><span class="line">输入：nums = [1]</span><br><span class="line">输出：[[1]]</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">需要一个记录当前路径的path</span><br><span class="line">需要一个记录所有子集的ans</span><br><span class="line">由于需要避免重复，采用一个数组来记录当前元素是否被访问过</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">所有元素都被用过</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">如果当前元素已经被使用了，直接continue</span><br><span class="line"></span><br><span class="line">对才放进path的元素，需要在used数组中标记</span><br><span class="line">回溯时也应该还原</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    vector&lt;int&gt; path;</span><br><span class="line">    </span><br><span class="line">    void backtracking(vector&lt;int&gt;&amp;nums , vector&lt;bool&gt;&amp;used)&#123;</span><br><span class="line">        if(path.size() == nums.size())&#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        for(int i=0;i&lt;nums.size();i++)&#123;</span><br><span class="line">            if(used[i]) continue;</span><br><span class="line">            </span><br><span class="line">            path.push_back(nums[i]);</span><br><span class="line">            used[i] = true;</span><br><span class="line">            backtracking(nums,used);</span><br><span class="line">            path.pop_back();</span><br><span class="line">            used[i] =false;</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; permute(vector&lt;int&gt;&amp; nums) &#123;</span><br><span class="line">        vector&lt;bool&gt;used(nums.size(),false);</span><br><span class="line">        sort(nums.begin(),nums.end());</span><br><span class="line">        backtracking(nums,used);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="12、力扣-47-全排列Ⅱ"><a href="#12、力扣-47-全排列Ⅱ" class="headerlink" title="12、力扣 47 全排列Ⅱ"></a>12、力扣 47 全排列Ⅱ</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：nums = [1,1,2]</span><br><span class="line">输出：</span><br><span class="line">[[1,1,2],</span><br><span class="line"> [1,2,1],</span><br><span class="line"> [2,1,1]]</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：nums = [1,2,3]</span><br><span class="line">输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">需要一个记录当前路径的path</span><br><span class="line">需要一个记录所有子集的ans</span><br><span class="line">由于需要避免重复，采用一个数组来记录当前元素是否被访问过</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">所有元素都被用过</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">如果当前元素和上一个元素相同，并且上一个元素已经被用过了，那直接continue</span><br><span class="line">如果当前元素已经被使用了，直接continue</span><br><span class="line"></span><br><span class="line">对才放进path的元素，需要在used数组中标记</span><br><span class="line">回溯时也应该还原</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; ans;</span><br><span class="line">    vector&lt;int&gt; path;</span><br><span class="line"></span><br><span class="line">    void backtracking(vector&lt;int&gt;&amp; nums,vector&lt;bool&gt;&amp; used)&#123;</span><br><span class="line">        if(path.size() == nums.size())&#123;</span><br><span class="line">            ans.push_back(path);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        for(int i=0;i&lt;nums.size();i++)&#123;</span><br><span class="line">            if(i&gt;0 &amp;&amp; nums[i] == nums[i-1] &amp;&amp; used[i-1] == true) continue;</span><br><span class="line">            if(used[i]) continue;</span><br><span class="line">            path.push_back(nums[i]);</span><br><span class="line">            used[i] = true;</span><br><span class="line">            backtracking(nums,used);</span><br><span class="line">            path.pop_back();</span><br><span class="line">            used[i] = false;</span><br><span class="line">        &#125;</span><br><span class="line">        return ;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; permuteUnique(vector&lt;int&gt;&amp; nums) &#123;</span><br><span class="line">        vector&lt;bool&gt; used(nums.size(),false);</span><br><span class="line">        sort(nums.begin(),nums.end());</span><br><span class="line">        backtracking(nums,used);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="13、-力扣-51-N皇后"><a href="#13、-力扣-51-N皇后" class="headerlink" title="13、 力扣 51 N皇后"></a>13、 力扣 51 N皇后</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。</span><br><span class="line"></span><br><span class="line">n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。</span><br><span class="line"></span><br><span class="line">给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。</span><br><span class="line"></span><br><span class="line">每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 &#x27;Q&#x27; 和 &#x27;.&#x27; 分别代表了皇后和空位。</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输入：n = 4</span><br><span class="line">输出：[[&quot;.Q..&quot;,&quot;...Q&quot;,&quot;Q...&quot;,&quot;..Q.&quot;],[&quot;..Q.&quot;,&quot;Q...&quot;,&quot;...Q&quot;,&quot;.Q..&quot;]]</span><br><span class="line">解释：如上图所示，4 皇后问题存在两个不同的解法。</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">定义一个二维的字符串数组，用来存储各个棋盘 vector&lt;vector&lt;string&gt;&gt; result;</span><br><span class="line">定义一个棋盘，存储当前的可能性vector&lt;string&gt; chessboard(n, string(n, &#x27;.&#x27;));</span><br><span class="line">//string(n, &#x27;.&#x27;)-&gt;创建了一个长度为 n 的字符串，其中的每个字符都是句点字符（&#x27;.&#x27;）</span><br><span class="line">需要一个棋盘 ，棋盘的总行数，当前遍历的行号</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当当前遍历的行号等于棋盘的总行数的时候，就将该棋盘加入到答案中</span><br></pre></td></tr></table></figure>
+
+<p>​	c、单层for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">判断当前位置是否合法，合法就把当前位置置&#x27;Q&#x27;</span><br><span class="line">进行递归后回溯，再置&#x27;.&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    vector&lt;vector&lt;string&gt;&gt; ans;</span><br><span class="line">    </span><br><span class="line">    bool is_legal(int row,int col,int n,vector&lt;string&gt;&amp; chess_map)&#123;</span><br><span class="line">        for(int i=0;i&lt;row;i++)&#123;</span><br><span class="line">            if(chess_map[i][col] == &#x27;Q&#x27;) return false;</span><br><span class="line">        &#125;</span><br><span class="line">        for(int i=row-1,j=col-1;i&gt;=0 &amp;&amp; j&gt;=0;i--,j--)&#123;</span><br><span class="line">            if(chess_map[i][j] == &#x27;Q&#x27;) return false;</span><br><span class="line">        &#125;</span><br><span class="line">        for(int i=row-1,j=col+1;i&gt;=0 &amp;&amp; j&lt;n;i--,j++)&#123;</span><br><span class="line">            if(chess_map[i][j] == &#x27;Q&#x27;) return false;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void backtracking(vector&lt;string&gt;&amp; chess_map,int n,int row)&#123;</span><br><span class="line">        if(row == n)&#123;</span><br><span class="line">            ans.push_back(chess_map);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        for(int col=0;col&lt;n;col++)&#123;</span><br><span class="line">            if(is_legal(row,col,n,chess_map))&#123;</span><br><span class="line">                chess_map[row][col] = &#x27;Q&#x27;;</span><br><span class="line">                backtracking(chess_map,n,row+1);</span><br><span class="line">                chess_map[row][col] = &#x27;.&#x27;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    vector&lt;vector&lt;string&gt;&gt; solveNQueens(int n) &#123;</span><br><span class="line">        vector&lt;string&gt;chess_map(n,string(n,&#x27;.&#x27;));</span><br><span class="line">        backtracking(chess_map,n,0);</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="14、力扣-37-解数独"><a href="#14、力扣-37-解数独" class="headerlink" title="14、力扣 37 解数独"></a>14、力扣 37 解数独</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">编写一个程序，通过填充空格来解决数独问题。</span><br><span class="line"></span><br><span class="line">数独的解法需 遵循如下规则：</span><br><span class="line"></span><br><span class="line">数字 1-9 在每一行只能出现一次。</span><br><span class="line">数字 1-9 在每一列只能出现一次。</span><br><span class="line">数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）</span><br><span class="line">数独部分空格内已填入了数字，空白格用 &#x27;.&#x27; 表示。</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输入：board = [[&quot;5&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;,&quot;9&quot;,&quot;5&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;9&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;],[&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;3&quot;],[&quot;4&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;],[&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;],[&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;8&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;4&quot;,&quot;1&quot;,&quot;9&quot;,&quot;.&quot;,&quot;.&quot;,&quot;5&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;9&quot;]]</span><br><span class="line">输出：[[&quot;5&quot;,&quot;3&quot;,&quot;4&quot;,&quot;6&quot;,&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;1&quot;,&quot;2&quot;],[&quot;6&quot;,&quot;7&quot;,&quot;2&quot;,&quot;1&quot;,&quot;9&quot;,&quot;5&quot;,&quot;3&quot;,&quot;4&quot;,&quot;8&quot;],[&quot;1&quot;,&quot;9&quot;,&quot;8&quot;,&quot;3&quot;,&quot;4&quot;,&quot;2&quot;,&quot;5&quot;,&quot;6&quot;,&quot;7&quot;],[&quot;8&quot;,&quot;5&quot;,&quot;9&quot;,&quot;7&quot;,&quot;6&quot;,&quot;1&quot;,&quot;4&quot;,&quot;2&quot;,&quot;3&quot;],[&quot;4&quot;,&quot;2&quot;,&quot;6&quot;,&quot;8&quot;,&quot;5&quot;,&quot;3&quot;,&quot;7&quot;,&quot;9&quot;,&quot;1&quot;],[&quot;7&quot;,&quot;1&quot;,&quot;3&quot;,&quot;9&quot;,&quot;2&quot;,&quot;4&quot;,&quot;8&quot;,&quot;5&quot;,&quot;6&quot;],[&quot;9&quot;,&quot;6&quot;,&quot;1&quot;,&quot;5&quot;,&quot;3&quot;,&quot;7&quot;,&quot;2&quot;,&quot;8&quot;,&quot;4&quot;],[&quot;2&quot;,&quot;8&quot;,&quot;7&quot;,&quot;4&quot;,&quot;1&quot;,&quot;9&quot;,&quot;6&quot;,&quot;3&quot;,&quot;5&quot;],[&quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;2&quot;,&quot;8&quot;,&quot;6&quot;,&quot;1&quot;,&quot;7&quot;,&quot;9&quot;]]</span><br></pre></td></tr></table></figure>
+
+<p>解法：首先确定三个重要的元素</p>
+<p>​	a、递归函数参数返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void 什么也不返回，直接在给我们的board数组上面更改。可以通过return true/false判断是否可行		</span><br></pre></td></tr></table></figure>
+
+<p>​	b、确定终止条件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">合法并且填满就结束</span><br></pre></td></tr></table></figure>
+
+<p>​	c、for循环的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">挨个遍历行列，每个空格枚举1-9。判断合法性</span><br></pre></td></tr></table></figure>
+
+<p>题解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    </span><br><span class="line">    bool is_legal(int row,int col,vector&lt;vector&lt;char&gt;&gt;&amp; board,char num)&#123;</span><br><span class="line">        for(int i=0;i&lt;9;i++)</span><br><span class="line">            if(board[row][i] == num || board[i][col] == num) return false;</span><br><span class="line">        int row_start = (row/3)*3;</span><br><span class="line">        int col_start = (col/3)*3;</span><br><span class="line">        for(int i=row_start;i&lt;row_start+3;i++)&#123;</span><br><span class="line">            for(int j=col_start;j&lt;col_start+3;j++)&#123;</span><br><span class="line">                if(board[i][j] == num) return false;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125; </span><br><span class="line">    </span><br><span class="line">    bool backtracking(vector&lt;vector&lt;char&gt;&gt;&amp; board)&#123;</span><br><span class="line">        for(int row=0;row&lt;9;row++)&#123;</span><br><span class="line">            for(int col=0;col&lt;9;col++)&#123;</span><br><span class="line">                if(board[row][col] == &#x27;.&#x27;)&#123;</span><br><span class="line">                    for(char k =&#x27;1&#x27;;k&lt;=&#x27;9&#x27;;k++)&#123;</span><br><span class="line">                        if(is_legal(row,col,board,k))&#123;</span><br><span class="line">                            board[row][col] = k;</span><br><span class="line">                            if(backtracking(board)) return true;</span><br><span class="line">                            board[row][col] = &#x27;.&#x27;;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    return false;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void solveSudoku(vector&lt;vector&lt;char&gt;&gt;&amp; board) &#123;</span><br><span class="line">        backtracking(board);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag"># 力扣</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/03/06/%E5%AD%90%E6%95%B0%E7%BB%84%E6%9C%80%E5%A4%A7&&%E7%BB%9D%E5%AF%B9%E4%BC%97%E6%95%B0&&%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/" rel="prev" title="子数组最大&&绝对众数&&三数之和">
+      <i class="fa fa-chevron-left"></i> 子数组最大&&绝对众数&&三数之和
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/03/13/%E6%9C%89%E5%BA%8F%E5%88%86%E6%95%B0/" rel="next" title="有序分数">
+      有序分数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">回溯算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">一、什么是回溯算法？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">二、使用场景是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%9B%9E%E6%BA%AF%E7%9A%84%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.3.</span> <span class="nav-text">三、回溯的模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E6%88%98"><span class="nav-number">1.4.</span> <span class="nav-text">四、实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%8A%9B%E6%89%A3-77%E7%BB%84%E5%90%88"><span class="nav-number">1.4.1.</span> <span class="nav-text">1、力扣 77组合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%8A%9B%E6%89%A3-216-%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8C%E2%85%A2%EF%BC%88%E5%AE%8C%E5%85%A8%E4%B8%8D%E9%87%8D%E5%A4%8D%EF%BC%89"><span class="nav-number">1.4.2.</span> <span class="nav-text">2、力扣 216 组合总和Ⅲ（完全不重复）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E5%8A%9B%E6%89%A3-17-%E7%94%B5%E8%AF%9D%E5%8F%B7%E7%A0%81%E7%9A%84%E7%BB%84%E5%90%88"><span class="nav-number">1.4.3.</span> <span class="nav-text">3、力扣 17 电话号码的组合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E5%8A%9B%E6%89%A3-39-%E7%BB%84%E5%90%88%E6%8E%92%E5%BA%8F%EF%BC%88%E5%90%8C%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E5%8F%AF%E8%A2%AB%E9%87%8D%E5%A4%8D%EF%BC%89"><span class="nav-number">1.4.4.</span> <span class="nav-text">4、力扣 39 组合排序（同一个元素可被重复）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5%E3%80%81%E5%8A%9B%E6%89%A3-40-%E7%BB%84%E5%90%88%E6%8E%92%E5%BA%8F-%E2%85%A1%EF%BC%88%E6%9C%89%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%E4%BD%86%E4%B8%8D%E8%83%BD%E9%87%8D%E5%A4%8D%E4%BD%BF%E7%94%A8%EF%BC%89"><span class="nav-number">1.4.5.</span> <span class="nav-text">5、力扣 40  组合排序 Ⅱ（有重复元素但不能重复使用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6%E3%80%81%E5%8A%9B%E6%89%A3-131-%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2"><span class="nav-number">1.4.6.</span> <span class="nav-text">6、力扣 131 分割回文串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7%E3%80%81%E5%8A%9B%E6%89%A3-93-%E5%A4%8D%E5%8E%9Fip%E5%9C%B0%E5%9D%80"><span class="nav-number">1.4.7.</span> <span class="nav-text">7、力扣 93  复原ip地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8%E3%80%81%E5%8A%9B%E6%89%A3-78-%E5%AD%90%E9%9B%86"><span class="nav-number">1.4.8.</span> <span class="nav-text">8、力扣 78  子集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9%E3%80%81%E5%8A%9B%E6%89%A3-90-%E5%AD%90%E9%9B%86%E2%85%A1"><span class="nav-number">1.4.9.</span> <span class="nav-text">9、力扣 90 子集Ⅱ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10%E3%80%81%E5%8A%9B%E6%89%A3-491-%E9%9D%9E%E9%80%92%E5%87%8F%E5%BA%8F%E5%88%97"><span class="nav-number">1.4.10.</span> <span class="nav-text">10、力扣 491 非递减序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11%E3%80%81%E5%8A%9B%E6%89%A3-46-%E5%85%A8%E6%8E%92%E5%88%97"><span class="nav-number">1.4.11.</span> <span class="nav-text">11、力扣 46 全排列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12%E3%80%81%E5%8A%9B%E6%89%A3-47-%E5%85%A8%E6%8E%92%E5%88%97%E2%85%A1"><span class="nav-number">1.4.12.</span> <span class="nav-text">12、力扣 47 全排列Ⅱ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13%E3%80%81-%E5%8A%9B%E6%89%A3-51-N%E7%9A%87%E5%90%8E"><span class="nav-number">1.4.13.</span> <span class="nav-text">13、 力扣 51 N皇后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14%E3%80%81%E5%8A%9B%E6%89%A3-37-%E8%A7%A3%E6%95%B0%E7%8B%AC"><span class="nav-number">1.4.14.</span> <span class="nav-text">14、力扣 37 解数独</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="AlexQFMM"
+      src="/images/Avatar.jpg">
+  <p class="site-author-name" itemprop="name">AlexQFMM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://qexo-ten-roan.vercel.app/" title="控制中心 → https:&#x2F;&#x2F;qexo-ten-roan.vercel.app&#x2F;" rel="noopener" target="_blank">控制中心</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AlexQFMM</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'UaEUwcYLlkREnSn9jPNe0oRf-gzGzoHsz',
+      appKey     : '5d7KwGdf31jiCBxBobH0wVk6',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/assets/miku.model.json"},"display":{"position":"left","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="java常见1、随机数12345import java.util.Random;Random r &#x3D; new Random();int num &#x3D; r.nextInt(10);   &#x2F;&#x2F;0-10 不包括10">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java常见用法">
+<meta property="og:url" content="http://example.com/2022/05/31/java%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name" content="AlexHome">
+<meta property="og:description" content="java常见1、随机数12345import java.util.Random;Random r &#x3D; new Random();int num &#x3D; r.nextInt(10);   &#x2F;&#x2F;0-10 不包括10">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-31T09:22:21.000Z">
+<meta property="article:modified_time" content="2024-03-25T10:01:23.092Z">
+<meta property="article:author" content="AlexQFMM">
+<meta property="article:tag" content="理论">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/05/31/java%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>java常见用法 | AlexHome</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AlexHome</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>留言</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/31/java%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Avatar.jpg">
+      <meta itemprop="name" content="AlexQFMM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlexHome">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java常见用法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-31 09:22:21" itemprop="dateCreated datePublished" datetime="2022-05-31T09:22:21+00:00">2022-05-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-03-25 10:01:23" itemprop="dateModified" datetime="2024-03-25T10:01:23+00:00">2024-03-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/05/31/java%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/" class="post-meta-item leancloud_visitors" data-flag-title="java常见用法" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/05/31/java%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/31/java%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="java常见"><a href="#java常见" class="headerlink" title="java常见"></a>java常见</h1><h4 id="1、随机数"><a href="#1、随机数" class="headerlink" title="1、随机数"></a>1、随机数</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Random;</span><br><span class="line"></span><br><span class="line">Random r = new Random();</span><br><span class="line"></span><br><span class="line">int num = r.nextInt(10);   //0-10 不包括10</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h4 id="2、数组"><a href="#2、数组" class="headerlink" title="2、数组"></a>2、数组</h4><h6 id="创建数组"><a href="#创建数组" class="headerlink" title="创建数组"></a>创建数组</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int[] nums = new int[100];</span><br><span class="line"></span><br><span class="line">String[] names = new String[]&#123;&quot;alex&quot;,&quot;qm&quot;,&quot;tom&quot;&#125;;</span><br><span class="line"></span><br><span class="line">Object[] object = &#123;&quot;alex&quot;,&quot;qm&quot;&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、输出（print，printf，println）"><a href="#3、输出（print，printf，println）" class="headerlink" title="3、输出（print，printf，println）"></a>3、输出（print，printf，println）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、print：将信息显示在命令窗口中，输出光标定位在最后一个字符之后。</span><br><span class="line"></span><br><span class="line">2、printf：将信息进行格式化显示在命令窗口中，输出光标定位在最后一个字符之后。</span><br><span class="line"></span><br><span class="line">3、println：将信息显示在命令窗口中，输出光标换行定位在下一行开头。</span><br></pre></td></tr></table></figure>
+
+<h4 id="4、包装类数据类型"><a href="#4、包装类数据类型" class="headerlink" title="4、包装类数据类型"></a>4、包装类数据类型</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">byte            Byte</span><br><span class="line">short           Short</span><br><span class="line">int             Integer     【特殊】</span><br><span class="line">long            Long</span><br><span class="line">float           Float</span><br><span class="line">double          Double</span><br><span class="line">char            Character   【特殊】</span><br><span class="line">boolean         Boolean</span><br></pre></td></tr></table></figure>
+
+<h4 id="5、for-each"><a href="#5、for-each" class="headerlink" title="5、for-each"></a>5、for-each</h4><h6 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for-each循环是通过应该与数组内元素类型相同的变量进行遍历，直接得到数组内从下标为0的位置至最后一个位置的元素的元素值，便于数组内元素的查找</span><br><span class="line">不用返回元素对应的数组下标时，for-each循环是一个不错的选择。</span><br></pre></td></tr></table></figure>
+
+<h6 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for ( 变量类型  变量名 : 数组名 ) &#123;</span><br><span class="line"></span><br><span class="line">    需要执行的循环语句;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> 其中变量类型为与数组内元素类型相同的类型。</span><br></pre></td></tr></table></figure>
+
+<h6 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int[] a =new int[10];</span><br><span class="line"></span><br><span class="line">//for 循环</span><br><span class="line">for(int i=0;i &lt; 10;i++) a[i];</span><br><span class="line"></span><br><span class="line">//for-each</span><br><span class="line">for(int i : a);</span><br></pre></td></tr></table></figure>
+
+<h4 id="6、输入Scanner"><a href="#6、输入Scanner" class="headerlink" title="6、输入Scanner"></a>6、输入Scanner</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner</span><br><span class="line"></span><br><span class="line">Scanner scan(自定义) = new Scanner(System.in); </span><br><span class="line"></span><br><span class="line">int a=scan.nextInt();</span><br><span class="line"></span><br><span class="line">string a=scan.next();</span><br><span class="line"></span><br><span class="line">scanner语句中没有char字符型的方法所以不能直接输入字符</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%90%86%E8%AE%BA/" rel="tag"># 理论</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/31/java-ArrayList%E4%B8%8EHashMap/" rel="next" title="java ArrayList与HashMap">
+      java ArrayList与HashMap <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java%E5%B8%B8%E8%A7%81"><span class="nav-number">1.</span> <span class="nav-text">java常见</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E9%9A%8F%E6%9C%BA%E6%95%B0"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">1、随机数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E6%95%B0%E7%BB%84"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">2、数组</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84"><span class="nav-number">1.0.0.2.0.1.</span> <span class="nav-text">创建数组</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E8%BE%93%E5%87%BA%EF%BC%88print%EF%BC%8Cprintf%EF%BC%8Cprintln%EF%BC%89"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">3、输出（print，printf，println）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">4、包装类数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5%E3%80%81for-each"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">5、for-each</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.0.0.5.0.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.0.0.5.0.2.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">1.0.0.5.0.3.</span> <span class="nav-text">对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6%E3%80%81%E8%BE%93%E5%85%A5Scanner"><span class="nav-number">1.0.0.6.</span> <span class="nav-text">6、输入Scanner</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="AlexQFMM"
+      src="/images/Avatar.jpg">
+  <p class="site-author-name" itemprop="name">AlexQFMM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://qexo-ten-roan.vercel.app/" title="控制中心 → https:&#x2F;&#x2F;qexo-ten-roan.vercel.app&#x2F;" rel="noopener" target="_blank">控制中心</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AlexQFMM</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'UaEUwcYLlkREnSn9jPNe0oRf-gzGzoHsz',
+      appKey     : '5d7KwGdf31jiCBxBobH0wVk6',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/assets/miku.model.json"},"display":{"position":"left","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

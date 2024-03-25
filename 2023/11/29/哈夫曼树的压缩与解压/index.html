@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="哈夫曼树实现文本压缩与解压一、头文件1234#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include &lt;windows.h&gt;#include &lt;dirent.h&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="哈夫曼树实现文本压缩与解压">
+<meta property="og:url" content="http://example.com/2023/11/29/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%9A%84%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8E%8B/index.html">
+<meta property="og:site_name" content="AlexHome">
+<meta property="og:description" content="哈夫曼树实现文本压缩与解压一、头文件1234#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include &lt;windows.h&gt;#include &lt;dirent.h&gt;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-29T17:11:45.000Z">
+<meta property="article:modified_time" content="2024-03-25T10:01:23.100Z">
+<meta property="article:author" content="AlexQFMM">
+<meta property="article:tag" content="数据结构-程序">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/11/29/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%9A%84%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>哈夫曼树实现文本压缩与解压 | AlexHome</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AlexHome</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>留言</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/29/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%9A%84%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Avatar.jpg">
+      <meta itemprop="name" content="AlexQFMM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlexHome">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          哈夫曼树实现文本压缩与解压
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-11-29 17:11:45" itemprop="dateCreated datePublished" datetime="2023-11-29T17:11:45+00:00">2023-11-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-03-25 10:01:23" itemprop="dateModified" datetime="2024-03-25T10:01:23+00:00">2024-03-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">C-数据结构</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2023/11/29/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%9A%84%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8E%8B/" class="post-meta-item leancloud_visitors" data-flag-title="哈夫曼树实现文本压缩与解压" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2023/11/29/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%9A%84%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8E%8B/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2023/11/29/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%9A%84%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8E%8B/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="哈夫曼树实现文本压缩与解压"><a href="#哈夫曼树实现文本压缩与解压" class="headerlink" title="哈夫曼树实现文本压缩与解压"></a>哈夫曼树实现文本压缩与解压</h1><h2 id="一、头文件"><a href="#一、头文件" class="headerlink" title="一、头文件"></a>一、头文件</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line">#include &lt;windows.h&gt;</span><br><span class="line">#include &lt;dirent.h&gt;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="二、哈夫曼树结构体"><a href="#二、哈夫曼树结构体" class="headerlink" title="二、哈夫曼树结构体"></a>二、哈夫曼树结构体</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">typedef struct HFNode&#123;</span><br><span class="line">    int weight;//结点的权 </span><br><span class="line">    int lchild,rchild,parent;</span><br><span class="line">&#125;HFNode;</span><br><span class="line"></span><br><span class="line">typedef struct HC&#123;</span><br><span class="line">	char ch;</span><br><span class="line">	int start;//表示哈夫曼编码的起始位置，可能是在编码字符串中的起始位置。</span><br><span class="line">	char link[101];//一个字符数组，存储哈夫曼编码的具体内容。</span><br><span class="line">&#125;HCList;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、读取文件夹设置权重"><a href="#三、读取文件夹设置权重" class="headerlink" title="三、读取文件夹设置权重"></a>三、读取文件夹设置权重</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void set_weight(char *path_scanf,int weight[128])&#123;//设置权重 </span><br><span class="line">	FILE *fp =fopen(path_scanf,&quot;r&quot;);</span><br><span class="line">	char ch;</span><br><span class="line">	ch=fgetc(fp);</span><br><span class="line">	while(ch!=EOF)&#123;</span><br><span class="line">		weight[ch]++;//利用ascll做数值出现的数组下标，数组用来计算出现的次数(权重) </span><br><span class="line">		ch=fgetc(fp);</span><br><span class="line">	&#125;</span><br><span class="line">	fclose(fp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void printf_weight(int weight[128])&#123;</span><br><span class="line">	for(int i=0;i&lt;128;i++)&#123;</span><br><span class="line">		if(weight[i]!=0)&#123;</span><br><span class="line">			if(i==&#x27;\n&#x27;)</span><br><span class="line">				printf(&quot;\\n:%d &quot;,weight[i]);</span><br><span class="line">			else if (i==&#x27;\t&#x27;)</span><br><span class="line">				printf(&quot;\\t:%d &quot;,weight[i]);</span><br><span class="line">			else printf(&quot;%c:%d &quot;,i,weight[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、查看当前路径下的所有文件夹"><a href="#四、查看当前路径下的所有文件夹" class="headerlink" title="四、查看当前路径下的所有文件夹"></a>四、查看当前路径下的所有文件夹</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void file_search()&#123;//查看当前文件夹 </span><br><span class="line">	DIR *dir = opendir(&quot;.&quot;);</span><br><span class="line">	printf(&quot;--------------------------\n&quot;);</span><br><span class="line">    if (dir) &#123;</span><br><span class="line">        struct dirent *entry;</span><br><span class="line"></span><br><span class="line">        // 读取目录中的文件</span><br><span class="line">        while ((entry = readdir(dir)) != NULL) &#123;</span><br><span class="line">            printf(&quot;%s\n&quot;, entry-&gt;d_name);</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        closedir(dir);// 关闭目录</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // 处理打开目录失败的情况</span><br><span class="line">        perror(&quot;opendir&quot;);</span><br><span class="line">        return ;</span><br><span class="line">    &#125;</span><br><span class="line">    printf(&quot;--------------------------\n&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、根据权重表生成HF表"><a href="#五、根据权重表生成HF表" class="headerlink" title="五、根据权重表生成HF表"></a>五、根据权重表生成HF表</h2><h6 id="根据基础HF表生成树"><a href="#根据基础HF表生成树" class="headerlink" title="根据基础HF表生成树"></a>根据基础HF表生成树</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void select(int n,int *n1,int *n2,HFNode* HF1)&#123;//选择最小的两个结点生成树 </span><br><span class="line">	int i,min=9999;</span><br><span class="line">	for(i =0;i&lt;n;i++)&#123;//寻找两个最小的存到n1,n2 </span><br><span class="line">		if(min &gt;= HF1[i].weight &amp;&amp; HF1[i].parent == -1)&#123;</span><br><span class="line">			min =HF1[i].weight;</span><br><span class="line">			*n2=*n1;</span><br><span class="line">			*n1=i;</span><br><span class="line">			continue; </span><br><span class="line">		&#125;</span><br><span class="line">		if(HF1[*n2].weight&gt;HF1[i].weight &amp;&amp; HF1[i].parent == -1)</span><br><span class="line">			*n2 = i;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="根据权重数组生成基础HF表"><a href="#根据权重数组生成基础HF表" class="headerlink" title="根据权重数组生成基础HF表"></a>根据权重数组生成基础HF表</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int HFTREE_init(HFNode* HF1,int weight[128])&#123;//根据 en_weight/key_weight数组的内容创建HT表 </span><br><span class="line">	int k=0;</span><br><span class="line">	for(int i=0;i&lt;128;i++)&#123;</span><br><span class="line">		if(weight[i]!=0)&#123;</span><br><span class="line">			HF1[k].weight = weight[i];</span><br><span class="line">			HF1[k].parent=HF1[k].rchild=HF1[k++].lchild =-1;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="构建链路"><a href="#构建链路" class="headerlink" title="构建链路"></a>构建链路</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">int HFTREE_create(HFNode* HF1,int k)&#123;//构建链路  </span><br><span class="line">	int n1=0,n2=0;</span><br><span class="line">	for(int i=k;i&lt;(2*k-1);i++)&#123;</span><br><span class="line">		n1=n2=i-1;</span><br><span class="line">		HF1[i].parent=HF1[i].rchild=HF1[i].lchild =-1;</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">		select(i,&amp;n1,&amp;n2,HF1);</span><br><span class="line">		</span><br><span class="line">		HF1[i].weight=HF1[n1].weight+HF1[n2].weight;</span><br><span class="line">		HF1[i].rchild=n1;</span><br><span class="line">		HF1[i].lchild=n2;</span><br><span class="line">		HF1[n1].parent=HF1[n2].parent=i;</span><br><span class="line">	&#125;</span><br><span class="line">	return k;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="六、生成叶子节点的HC编码"><a href="#六、生成叶子节点的HC编码" class="headerlink" title="六、生成叶子节点的HC编码"></a>六、生成叶子节点的HC编码</h2><h6 id="初始化各个字符的属性表"><a href="#初始化各个字符的属性表" class="headerlink" title="初始化各个字符的属性表"></a>初始化各个字符的属性表</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">HCList* HCList_init(int weight[128])&#123;//初始化各个字符的属性表 </span><br><span class="line">	HCList* HC1 = (HCList*)malloc(256*sizeof(HCList));</span><br><span class="line">	int k=0,j;</span><br><span class="line">	for(int i=0;i&lt;128;i++)&#123;</span><br><span class="line">		if(weight[i]!=0)&#123;</span><br><span class="line">			HC1[k].ch=i;</span><br><span class="line">			HC1[k].start=99;</span><br><span class="line">			for(j=0;j&lt;100;j++) HC1[k].link[j] = &#x27;0&#x27;;</span><br><span class="line">			HC1[k].link[j] = &#x27;\0&#x27;;</span><br><span class="line">			k++;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return HC1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="编码左0右1"><a href="#编码左0右1" class="headerlink" title="编码左0右1"></a>编码左0右1</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void HCcode_create(int n,HCList* HC1,HFNode* HF1)&#123;//编码左0右1 </span><br><span class="line">	int i,node,parent;</span><br><span class="line">	for(i =0;i&lt;n;i++)&#123;</span><br><span class="line">		parent = HF1[i].parent;</span><br><span class="line">		node = i;</span><br><span class="line">		while(parent!=-1)</span><br><span class="line">		&#123;</span><br><span class="line">			if(HF1[parent].lchild == node)</span><br><span class="line">				HC1[i].link[HC1[i].start] = &#x27;0&#x27;;</span><br><span class="line">			else</span><br><span class="line">				HC1[i].link[HC1[i].start] = &#x27;1&#x27;;</span><br><span class="line">			HC1[i].start--;</span><br><span class="line">			node = parent;</span><br><span class="line">			parent = HF1[node].parent;</span><br><span class="line">		&#125;</span><br><span class="line">		HC1[i].start++;</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、HC-HF的输出"><a href="#七、HC-HF的输出" class="headerlink" title="七、HC,HF的输出"></a>七、HC,HF的输出</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void HFTREE_print(int n,HFNode* HF1)&#123;//输出HF </span><br><span class="line">	printf(&quot;共%d个\n&quot;,n);</span><br><span class="line">	for(int i=0;i&lt;n*2-1;i++)</span><br><span class="line">		printf(&quot;%-2d: weight=%d,lchild=%d,rchild=%d,parent=%d\n&quot;,i,HF1[i].weight,HF1[i].lchild,HF1[i].rchild,HF1[i].parent);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void HC_print(int n,HCList* HC1)&#123;//输出HC </span><br><span class="line">	for(int i=0;i&lt;n;i++)</span><br><span class="line">	if(HC1[i].ch==&#x27;\n&#x27;)</span><br><span class="line">		printf(&quot;ch=\\n,start=%-2d,link=%s\n&quot;,HC1[i].start,HC1[i].link+HC1[i].start);</span><br><span class="line">	else</span><br><span class="line">		printf(&quot;ch=%c ,start=%-2d,link=%s\n&quot;,HC1[i].ch,HC1[i].start,HC1[i].link+HC1[i].start);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="八、压缩"><a href="#八、压缩" class="headerlink" title="八、压缩"></a>八、压缩</h2><h6 id="写key文本，用于后面解压时生成哈夫曼树"><a href="#写key文本，用于后面解压时生成哈夫曼树" class="headerlink" title="写key文本，用于后面解压时生成哈夫曼树"></a>写key文本，用于后面解压时生成哈夫曼树</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void write_key(int n,char* path_desfile,int weight[128])&#123;//开头写字符出现的次数 </span><br><span class="line">	SetCurrentDirectory(path_desfile);</span><br><span class="line">	FILE* fp = fopen(&quot;key.txt&quot;,&quot;wb&quot;);</span><br><span class="line">	for(int i=0;i&lt;128;i++)&#123;</span><br><span class="line">		if(weight[i]!=0)&#123;</span><br><span class="line">			if(i==&#x27;\n&#x27;)</span><br><span class="line">				fprintf(fp,&quot;\\n:%d &quot;,weight[i]);</span><br><span class="line">			else if (i==&#x27;\t&#x27;)</span><br><span class="line">				fprintf(fp,&quot;\\t:%d &quot;,weight[i]);</span><br><span class="line">			else fprintf(fp,&quot;%c:%d &quot;,i,weight[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fclose(fp);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<h6 id="将叶子结点的编码转为字节编码存储"><a href="#将叶子结点的编码转为字节编码存储" class="headerlink" title="将叶子结点的编码转为字节编码存储"></a>将叶子结点的编码转为字节编码存储</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">int translate_record(HCList* HC1,int n,char str[50000],char* path_scanf)&#123;//将叶子结点的编码转为字节编码存储 </span><br><span class="line">	FILE *fp1;</span><br><span class="line">	int j,k=0;</span><br><span class="line">	char ch;</span><br><span class="line">	fp1 = fopen(path_scanf,&quot;rb&quot;);</span><br><span class="line">	ch = fgetc(fp1);</span><br><span class="line">	while(ch!=EOF)&#123;//将待压缩文件中的字符和HC表中逐一对比，相同就把编码值记录下来 </span><br><span class="line">		for(int i=0;i&lt;n;i++)&#123;</span><br><span class="line">			if(ch == HC1[i].ch)&#123;</span><br><span class="line">				for(j=HC1[i].start;j&lt;100;j++,k++)&#123;</span><br><span class="line">					ch = HC1[i].link[j];//存放对应的哈夫曼树编码 </span><br><span class="line">					str[k] = ch;</span><br><span class="line">				&#125;</span><br><span class="line">				break;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		ch = fgetc(fp1);</span><br><span class="line">	&#125;</span><br><span class="line">	str[k]=&#x27;\0&#x27;;</span><br><span class="line">	fclose(fp1);</span><br><span class="line">	return k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">void compress(int k,char str[50000],char* path_desfile)&#123;//将记录下来的哈夫曼编码压缩</span><br><span class="line">	FILE* fp2 = fopen(&quot;value.bin&quot;,&quot;wb&quot;);</span><br><span class="line">	char ch,ch_t;</span><br><span class="line">	int c_b,j=0;</span><br><span class="line">	fprintf(fp2,&quot;%d:\n&quot;,k);</span><br><span class="line">	int length = strlen(str);</span><br><span class="line">	int number = length/8;</span><br><span class="line">	printf(&quot;\n%d,%d\n&quot;,length,number);</span><br><span class="line">	for(int i=1;str[j];i++)&#123;</span><br><span class="line">		ch=str[j++];</span><br><span class="line">		c_b = (ch-&#x27;0&#x27;) + c_b*2;//转换为二进制</span><br><span class="line">		if(i==8)&#123;</span><br><span class="line">			ch_t = c_b;</span><br><span class="line">			fputc(ch_t,fp2);</span><br><span class="line">			i=0;</span><br><span class="line">			number--;</span><br><span class="line">			if(number == 0) break;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	while(str[j])&#123;//剩下的</span><br><span class="line">		fputc(str[j++],fp2);</span><br><span class="line">	&#125;</span><br><span class="line">	fclose(fp2); </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="九、解压"><a href="#九、解压" class="headerlink" title="九、解压"></a>九、解压</h2><p>读key文件生成key_weight</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">void read_key(int key_weight[128])&#123;//通过key来生成key_weight </span><br><span class="line">	int num=0,i=0,j=0;</span><br><span class="line">	char temp[1000],ch;</span><br><span class="line">	FILE *fp = fopen(&quot;key.txt&quot;,&quot;rb&quot;);</span><br><span class="line">	ch = fgetc(fp);</span><br><span class="line">	while(ch != EOF)  &#123;//提取key文本 </span><br><span class="line">		temp[i++] = ch;</span><br><span class="line">		ch = fgetc(fp);</span><br><span class="line">	&#125;</span><br><span class="line">	temp[i]= &#x27;\0&#x27;;</span><br><span class="line">	puts(temp);</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	for(int i=0;temp[i];i++)&#123;//写key对应的数组 </span><br><span class="line">		if(temp[i]==&#x27;:&#x27;&amp;&amp;temp[i+1]!=&#x27;:&#x27;)&#123;</span><br><span class="line">			if(temp[i-1]==&#x27;n&#x27;&amp;&amp;temp[i-2]==&#x27;\\&#x27;)</span><br><span class="line">				j = &#x27;\n&#x27;;</span><br><span class="line">			else j = temp[i-1];//字符的ascll码</span><br><span class="line">			num = 0;</span><br><span class="line">			while(temp[++i]!=&#x27; &#x27; &amp;&amp; temp[i]!=&#x27;\0&#x27;)&#123;//冒号开始后一位到空格是字符的数量 </span><br><span class="line">				num = temp[i]-&#x27;0&#x27; + num*10;</span><br><span class="line">			&#125;</span><br><span class="line">			key_weight[j] = num;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	/*</span><br><span class="line">	for(int i=0;i&lt;128;i++)&#123;</span><br><span class="line">		if(key_weight[i]!=0)</span><br><span class="line">			printf(&quot;%c:%d &quot;,i,key_weight[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	*/</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">void decompression(HCList* HC1,HFNode* HF1,int n,char * first_path,char * path_composs)&#123;//根据hf、hc表还原value文件 </span><br><span class="line">	FILE *fp = fopen(&quot;value.bin&quot;,&quot;rb&quot;);</span><br><span class="line">	</span><br><span class="line">	//将value中的二进制编码存到 temp_array中 </span><br><span class="line">	int temp_array[50000]=&#123;0&#125;;</span><br><span class="line">    unsigned char byte;</span><br><span class="line">    char ch;</span><br><span class="line">    int bitIndex = 0;</span><br><span class="line">    int num=0;</span><br><span class="line">    byte = fgetc(fp);//跳过第一行 </span><br><span class="line">    while(byte!=&#x27;\n&#x27;) &#123;</span><br><span class="line">    	if(byte!=&#x27;:&#x27;)</span><br><span class="line">			num = byte - &#x27;0&#x27; + num * 10;</span><br><span class="line">		byte = fgetc(fp); </span><br><span class="line">	&#125;</span><br><span class="line">    int c = num/8;</span><br><span class="line">    while (c-- &amp;&amp; fread(&amp;byte, sizeof(unsigned char), 1, fp) &gt; 0) &#123;</span><br><span class="line">        for (int i = 7; i &gt;= 0; --i) &#123;</span><br><span class="line">            // 从每个字节的最高位开始读取</span><br><span class="line">            int bit = (byte &gt;&gt; i) &amp; 1;</span><br><span class="line">            temp_array[bitIndex++] = bit;</span><br><span class="line">            printf(&quot;%d&quot;,bit);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	ch = fgetc(fp);</span><br><span class="line">    while(ch!=EOF)&#123;</span><br><span class="line">		printf(&quot;%c&quot;,ch);</span><br><span class="line">		int bit =ch-&#x27;0&#x27;;</span><br><span class="line">    	 temp_array[bitIndex++] = bit;</span><br><span class="line">    	 //printf(&quot;%d&quot;,bit);</span><br><span class="line">		 ch = fgetc(fp);</span><br><span class="line">	&#125;</span><br><span class="line">    printf(&quot;\n&quot;);</span><br><span class="line">	fclose(fp);</span><br><span class="line">	SetCurrentDirectory(first_path);</span><br><span class="line">	</span><br><span class="line">	strcat(path_composs,&quot;_decompress.txt&quot;);</span><br><span class="line">	FILE *fp2 = fopen(path_composs,&quot;wb&quot;);</span><br><span class="line">	//解压 </span><br><span class="line">	//寻找根节点 </span><br><span class="line">	int k=0;</span><br><span class="line">	while(HF1[k++].parent != -1);</span><br><span class="line">		HFNode* temp = &amp;HF1[--k];</span><br><span class="line">		HFNode* root = &amp;HF1[k];</span><br><span class="line">		printf(&quot;weight=%d,lchild=%d,rchild=%d,parent=%d\n&quot;,temp-&gt;weight,temp-&gt;lchild,temp-&gt;rchild,temp-&gt;parent);</span><br><span class="line">		printf(&quot;weight=%d,lchild=%d,rchild=%d,parent=%d\n&quot;,root-&gt;weight,root-&gt;lchild,root-&gt;rchild,root-&gt;parent);</span><br><span class="line">	//按位寻找叶子结点 </span><br><span class="line">		</span><br><span class="line">	for(int i=0;i&lt;bitIndex;i++)&#123;</span><br><span class="line">		if(temp_array[i] == 0)&#123;</span><br><span class="line">			temp = &amp;HF1[temp-&gt;lchild];</span><br><span class="line">			printf(&quot;weight=%d,lchild=%d,rchild=%d,parent=%d\n&quot;,temp-&gt;weight,temp-&gt;lchild,temp-&gt;rchild,temp-&gt;parent);</span><br><span class="line">		&#125;</span><br><span class="line">		else if(temp_array[i] == 1)&#123;</span><br><span class="line">			temp = &amp;HF1[temp-&gt;rchild];</span><br><span class="line">			printf(&quot;weight=%d,lchild=%d,rchild=%d,parent=%d\n&quot;,temp-&gt;weight,temp-&gt;lchild,temp-&gt;rchild,temp-&gt;parent);</span><br><span class="line">		&#125;</span><br><span class="line">		if(temp-&gt;lchild == -1 &amp;&amp; temp-&gt;rchild == -1)&#123;//到达叶子结点</span><br><span class="line">			int j=0;</span><br><span class="line">			for(;j&lt;n;j++)&#123;</span><br><span class="line">				if(&amp;HF1[j] == temp) break;</span><br><span class="line">			&#125;</span><br><span class="line">			printf(&quot;%c\n&quot;,HC1[j].ch);</span><br><span class="line">			fputc(HC1[j].ch,fp2);</span><br><span class="line">			temp = root;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fclose(fp2);</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="十、控制台"><a href="#十、控制台" class="headerlink" title="十、控制台"></a>十、控制台</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">void control()&#123;</span><br><span class="line">	int flag;</span><br><span class="line">	char *first_path =(char *)malloc(1000);</span><br><span class="line">	first_path=&quot;E:\\workplace\\Dev c ++\\数据结构\\作业\\文本的解压与压缩&quot;;</span><br><span class="line">	puts(first_path);</span><br><span class="line">	file_search();</span><br><span class="line">	</span><br><span class="line">	printf(&quot;------------------\n1、压缩\n2、解压\n------------------\n&quot;);</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;flag);</span><br><span class="line">	if(flag == 1)&#123;</span><br><span class="line">		int en_weight[128]=&#123;0&#125;;</span><br><span class="line">		printf(&quot;请输入你要压缩的文本名(加后缀):\n&quot;);</span><br><span class="line">		char *path_scanf=(char *)malloc(100);//待压缩文本路径 </span><br><span class="line">		scanf(&quot;%s&quot;,path_scanf);</span><br><span class="line">		set_weight(path_scanf,en_weight);</span><br><span class="line">		printf_weight(en_weight);</span><br><span class="line">		//生成HF表 </span><br><span class="line">		HFNode* HF1 = (HFNode*)malloc(256*sizeof(HFNode));</span><br><span class="line">		int n = HFTREE_init(HF1,en_weight);</span><br><span class="line">		HFTREE_create(HF1,n);</span><br><span class="line">		//HFTREE_print(n,HF1);</span><br><span class="line">		</span><br><span class="line">		//生成HC表 </span><br><span class="line">		HCList* HC1 = HCList_init(en_weight);</span><br><span class="line">		HCcode_create(n,HC1,HF1);</span><br><span class="line">		//HC_print(n,HC1);</span><br><span class="line">		</span><br><span class="line">		//将源文件文本转换为哈夫曼树编码 </span><br><span class="line">		char str[50000];//记录源文件中的哈夫曼编码 </span><br><span class="line">    	int k=translate_record(HC1,n,str,path_scanf);</span><br><span class="line">		puts(str);</span><br><span class="line">		//压缩至文件夹 </span><br><span class="line">		printf(&quot;请输入你压缩后的文件(文件夹):\n&quot;);</span><br><span class="line">		char *path_desfile=(char *)malloc(100);</span><br><span class="line">		scanf(&quot;%s&quot;,path_desfile);</span><br><span class="line">		if (CreateDirectory(path_desfile, NULL)) &#123;//创建文件夹 </span><br><span class="line">        	printf(&quot;Folder created successfully.\n&quot;);</span><br><span class="line">    	&#125; else &#123;</span><br><span class="line">    	    printf(&quot;Failed to create folder.\n&quot;);</span><br><span class="line">    	&#125;</span><br><span class="line">    	printf(&quot;目录已变更至%s\n&quot;,path_desfile);</span><br><span class="line">		write_key(n,path_desfile,en_weight); //生成key文件 </span><br><span class="line">		compress(k,str,path_desfile); //生成解压文件</span><br><span class="line">		file_search();</span><br><span class="line">		free(path_scanf);</span><br><span class="line">		free(path_desfile);</span><br><span class="line">	&#125;</span><br><span class="line">	else if(flag == 2)&#123;</span><br><span class="line">		printf(&quot;请输入你要解压的文本名(无后缀):\n&quot;);</span><br><span class="line">		char *path_composs=(char *)malloc(100);//待压缩文本路径 </span><br><span class="line">		scanf(&quot;%s&quot;,path_composs);</span><br><span class="line">		SetCurrentDirectory(path_composs);//更改目录 </span><br><span class="line">		</span><br><span class="line">		int key_weight[128]=&#123;0&#125;;</span><br><span class="line">		read_key(key_weight);</span><br><span class="line">		</span><br><span class="line">		//根据key建立hf表</span><br><span class="line">		HFNode* HF2 = (HFNode*)malloc(256*sizeof(HFNode));</span><br><span class="line">		int n = HFTREE_init(HF2,key_weight);</span><br><span class="line">		HFTREE_create(HF2,n);</span><br><span class="line">		//HFTREE_print(n,HF2);</span><br><span class="line">		</span><br><span class="line">		//建立hc表 </span><br><span class="line">		HCList* HC2 = HCList_init(key_weight);</span><br><span class="line">		HCcode_create(n,HC2,HF2);</span><br><span class="line">		//HC_print(n,HC2);</span><br><span class="line">		</span><br><span class="line">		//根据hf、hc表还原value文件 </span><br><span class="line">		decompression(HC2,HF2,n,first_path,path_composs);</span><br><span class="line">	&#125;</span><br><span class="line">	else printf(&quot;error\n&quot;);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<h2 id="十一、主函数"><a href="#十一、主函数" class="headerlink" title="十一、主函数"></a>十一、主函数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int main()&#123;</span><br><span class="line">	control();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%A8%8B%E5%BA%8F/" rel="tag"># 数据结构-程序</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/11/14/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="prev" title="二叉树的基本操作">
+      <i class="fa fa-chevron-left"></i> 二叉树的基本操作
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/01/16/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A28%E8%BF%9B%E5%88%B6/" rel="next" title="16进制转换8进制">
+      16进制转换8进制 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E5%AE%9E%E7%8E%B0%E6%96%87%E6%9C%AC%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8E%8B"><span class="nav-number">1.</span> <span class="nav-text">哈夫曼树实现文本压缩与解压</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">一、头文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">1.2.</span> <span class="nav-text">二、哈夫曼树结构体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%A4%B9%E8%AE%BE%E7%BD%AE%E6%9D%83%E9%87%8D"><span class="nav-number">1.3.</span> <span class="nav-text">三、读取文件夹设置权重</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%BE%93%E5%87%BA"><span class="nav-number">1.3.0.0.0.1.</span> <span class="nav-text">输出</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E8%B7%AF%E5%BE%84%E4%B8%8B%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">1.4.</span> <span class="nav-text">四、查看当前路径下的所有文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%A0%B9%E6%8D%AE%E6%9D%83%E9%87%8D%E8%A1%A8%E7%94%9F%E6%88%90HF%E8%A1%A8"><span class="nav-number">1.5.</span> <span class="nav-text">五、根据权重表生成HF表</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E5%9F%BA%E7%A1%80HF%E8%A1%A8%E7%94%9F%E6%88%90%E6%A0%91"><span class="nav-number">1.5.0.0.0.1.</span> <span class="nav-text">根据基础HF表生成树</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E6%9D%83%E9%87%8D%E6%95%B0%E7%BB%84%E7%94%9F%E6%88%90%E5%9F%BA%E7%A1%80HF%E8%A1%A8"><span class="nav-number">1.5.0.0.0.2.</span> <span class="nav-text">根据权重数组生成基础HF表</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E9%93%BE%E8%B7%AF"><span class="nav-number">1.5.0.0.0.3.</span> <span class="nav-text">构建链路</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%94%9F%E6%88%90%E5%8F%B6%E5%AD%90%E8%8A%82%E7%82%B9%E7%9A%84HC%E7%BC%96%E7%A0%81"><span class="nav-number">1.6.</span> <span class="nav-text">六、生成叶子节点的HC编码</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%84%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%9A%84%E5%B1%9E%E6%80%A7%E8%A1%A8"><span class="nav-number">1.6.0.0.0.1.</span> <span class="nav-text">初始化各个字符的属性表</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%B7%A60%E5%8F%B31"><span class="nav-number">1.6.0.0.0.2.</span> <span class="nav-text">编码左0右1</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81HC-HF%E7%9A%84%E8%BE%93%E5%87%BA"><span class="nav-number">1.7.</span> <span class="nav-text">七、HC,HF的输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.8.</span> <span class="nav-text">八、压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%86%99key%E6%96%87%E6%9C%AC%EF%BC%8C%E7%94%A8%E4%BA%8E%E5%90%8E%E9%9D%A2%E8%A7%A3%E5%8E%8B%E6%97%B6%E7%94%9F%E6%88%90%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91"><span class="nav-number">1.8.0.0.0.1.</span> <span class="nav-text">写key文本，用于后面解压时生成哈夫曼树</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%B0%86%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9%E7%9A%84%E7%BC%96%E7%A0%81%E8%BD%AC%E4%B8%BA%E5%AD%97%E8%8A%82%E7%BC%96%E7%A0%81%E5%AD%98%E5%82%A8"><span class="nav-number">1.8.0.0.0.2.</span> <span class="nav-text">将叶子结点的编码转为字节编码存储</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.8.0.0.0.3.</span> <span class="nav-text">压缩</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E8%A7%A3%E5%8E%8B"><span class="nav-number">1.9.</span> <span class="nav-text">九、解压</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%A7%A3%E5%8E%8B"><span class="nav-number">1.9.0.0.0.1.</span> <span class="nav-text">解压</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E6%8E%A7%E5%88%B6%E5%8F%B0"><span class="nav-number">1.10.</span> <span class="nav-text">十、控制台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E4%B8%BB%E5%87%BD%E6%95%B0"><span class="nav-number">1.11.</span> <span class="nav-text">十一、主函数</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="AlexQFMM"
+      src="/images/Avatar.jpg">
+  <p class="site-author-name" itemprop="name">AlexQFMM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://qexo-ten-roan.vercel.app/" title="控制中心 → https:&#x2F;&#x2F;qexo-ten-roan.vercel.app&#x2F;" rel="noopener" target="_blank">控制中心</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AlexQFMM</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'UaEUwcYLlkREnSn9jPNe0oRf-gzGzoHsz',
+      appKey     : '5d7KwGdf31jiCBxBobH0wVk6',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/assets/miku.model.json"},"display":{"position":"left","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

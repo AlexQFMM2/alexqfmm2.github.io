@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ArrayList一、概念123ArrayList 类是一个可以动态修改的数组，与普通数组的区别就是它是没有固定大小的限制，我们可以添加或删除元素。ArrayList 继承了 AbstractList ，并实现了 List 接口。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java ArrayList与HashMap">
+<meta property="og:url" content="http://example.com/2022/05/31/java-ArrayList%E4%B8%8EHashMap/index.html">
+<meta property="og:site_name" content="AlexHome">
+<meta property="og:description" content="ArrayList一、概念123ArrayList 类是一个可以动态修改的数组，与普通数组的区别就是它是没有固定大小的限制，我们可以添加或删除元素。ArrayList 继承了 AbstractList ，并实现了 List 接口。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-31T09:42:00.000Z">
+<meta property="article:modified_time" content="2024-03-25T10:01:23.092Z">
+<meta property="article:author" content="AlexQFMM">
+<meta property="article:tag" content="理论">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/05/31/java-ArrayList%E4%B8%8EHashMap/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>java ArrayList与HashMap | AlexHome</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AlexHome</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>留言</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/31/java-ArrayList%E4%B8%8EHashMap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Avatar.jpg">
+      <meta itemprop="name" content="AlexQFMM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlexHome">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java ArrayList与HashMap
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-31 09:42:00" itemprop="dateCreated datePublished" datetime="2022-05-31T09:42:00+00:00">2022-05-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-03-25 10:01:23" itemprop="dateModified" datetime="2024-03-25T10:01:23+00:00">2024-03-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/05/31/java-ArrayList%E4%B8%8EHashMap/" class="post-meta-item leancloud_visitors" data-flag-title="java ArrayList与HashMap" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/05/31/java-ArrayList%E4%B8%8EHashMap/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/31/java-ArrayList%E4%B8%8EHashMap/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h1><h4 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ArrayList 类是一个可以动态修改的数组，与普通数组的区别就是它是没有固定大小的限制，我们可以添加或删除元素。</span><br><span class="line"></span><br><span class="line">ArrayList 继承了 AbstractList ，并实现了 List 接口。</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h4 id="二、使用"><a href="#二、使用" class="headerlink" title="二、使用"></a>二、使用</h4><h6 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br></pre></td></tr></table></figure>
+
+<h6 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;E&gt; list =new ArrayList&lt;&gt;();　</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">E只能为引用数据类型。</span><br><span class="line"></span><br><span class="line">​	Byte</span><br><span class="line">​	Short</span><br><span class="line">​	Integer     【特殊】</span><br><span class="line">​	Long</span><br><span class="line">​	Float</span><br><span class="line">​	Double</span><br><span class="line">​	Character   【特殊】</span><br><span class="line">​	Boolean</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="三、常用方法"><a href="#三、常用方法" class="headerlink" title="三、常用方法"></a>三、常用方法</h4><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">add()</td>
+<td align="left">将元素插入到指定位置的 arraylist 中</td>
+</tr>
+<tr>
+<td align="left">addAll()</td>
+<td align="left">添加集合中的所有元素到 arraylist 中</td>
+</tr>
+<tr>
+<td align="left">clear()</td>
+<td align="left">删除 arraylist 中的所有元素</td>
+</tr>
+<tr>
+<td align="left">clone()</td>
+<td align="left">复制一份 arraylist</td>
+</tr>
+<tr>
+<td align="left">contains()</td>
+<td align="left">判断元素是否在 arraylist</td>
+</tr>
+<tr>
+<td align="left">get()</td>
+<td align="left">通过索引值获取 arraylist 中的元素</td>
+</tr>
+<tr>
+<td align="left">indexOf()</td>
+<td align="left">返回 arraylist 中元素的索引值</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist-removeall.html">removeAll()</a></td>
+<td align="left">删除存在于指定集合中的 arraylist 里的所有元素</td>
+</tr>
+<tr>
+<td align="left">remove()</td>
+<td align="left">删除 arraylist 里的单个元素</td>
+</tr>
+<tr>
+<td align="left">size()</td>
+<td align="left">返回 arraylist 里元素数量</td>
+</tr>
+<tr>
+<td align="left">isEmpty()</td>
+<td align="left">判断 arraylist 是否为空</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist-sublist.html">subList()</a></td>
+<td align="left">截取部分 arraylist 的元素</td>
+</tr>
+<tr>
+<td align="left">set()</td>
+<td align="left">替换 arraylist 中指定索引的元素</td>
+</tr>
+<tr>
+<td align="left">sort()</td>
+<td align="left">对 arraylist 元素进行排序</td>
+</tr>
+<tr>
+<td align="left">toArray()</td>
+<td align="left">将 arraylist 转换为数组</td>
+</tr>
+<tr>
+<td align="left">toString()</td>
+<td align="left">将 arraylist 转换为字符串</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist-surecapacity.html">ensureCapacity</a>()</td>
+<td align="left">设置指定容量大小的 arraylist</td>
+</tr>
+<tr>
+<td align="left">lastIndexOf()</td>
+<td align="left">返回指定元素在 arraylist 中最后一次出现的位置</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist-retainall.html">retainAll()</a></td>
+<td align="left">保留 arraylist 中在指定集合中也存在的那些元素</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist-containsall.html">containsAll()</a></td>
+<td align="left">查看 arraylist 是否包含指定集合中的所有元素</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist-trimtosize.html">trimToSize()</a></td>
+<td align="left">将 arraylist 中的容量调整为数组中的元素个数</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist-removerange.html">removeRange()</a></td>
+<td align="left">删除 arraylist 中指定索引之间存在的元素</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist-replaceall.html">replaceAll()</a></td>
+<td align="left">将给定的操作内容替换掉数组中每一个元素</td>
+</tr>
+<tr>
+<td align="left">removeif()</td>
+<td align="left">删除所有满足特定条件的 arraylist 元素</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-arraylist-foreach.html">forEach()</a></td>
+<td align="left">遍历 arraylist 中每一个元素并执行特定操作</td>
+</tr>
+</tbody></table>
+<h4 id="四、排序"><a href="#四、排序" class="headerlink" title="四、排序"></a>四、排序</h4><h6 id="导入Collections类"><a href="#导入Collections类" class="headerlink" title="导入Collections类"></a>导入Collections类</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Collections;</span><br></pre></td></tr></table></figure>
+
+<h6 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Collections.sort(list);</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="五、遍历"><a href="#五、遍历" class="headerlink" title="五、遍历"></a>五、遍历</h4><h6 id="1、for-each遍历"><a href="#1、for-each遍历" class="headerlink" title="1、for-each遍历"></a>1、for-each遍历</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for(int i : list)</span><br><span class="line">System.out.println( i ); </span><br></pre></td></tr></table></figure>
+
+<h6 id="2、迭代器遍历"><a href="#2、迭代器遍历" class="headerlink" title="2、迭代器遍历"></a>2、迭代器遍历</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Iterator;</span><br><span class="line"></span><br><span class="line">Iterator&lt;Integer&gt; i = list.iterator(); //定义迭代器</span><br><span class="line"></span><br><span class="line">while(i.hasNext)</span><br><span class="line"></span><br><span class="line">&#123;	</span><br><span class="line"> 	System.out.println( i.next() );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PS：i.next()的值的类型为Object！</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h1><h4 id="一、概念-1"><a href="#一、概念-1" class="headerlink" title="一、概念"></a>一、概念</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">HashMap 是一个散列表，它存储的内容是键值对(key-value)映射。</span><br><span class="line"></span><br><span class="line">HashMap 实现了 Map 接口，根据键的 HashCode 值存储数据，具有很快的访问速度，最多允许一条记录的键为 null，不支持线程同步。</span><br><span class="line"></span><br><span class="line">HashMap 是无序的，即不会记录插入的顺序。</span><br><span class="line"></span><br><span class="line">HashMap 继承于AbstractMap，实现了 Map、Cloneable、java.io.Serializable 接口。</span><br><span class="line"></span><br><span class="line">HashMap 的 key 与 value 类型可以相同也可以不同，可以是字符串（String）类型的 key 和 value，也可以是整型（Integer）的 key 和字符串（String）类型的 value。</span><br><span class="line"></span><br><span class="line">HashMap 中的元素实际上是对象，一些常见的基本类型可以使用它的包装类。</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="二、使用-1"><a href="#二、使用-1" class="headerlink" title="二、使用"></a>二、使用</h4><h6 id="导入-1"><a href="#导入-1" class="headerlink" title="导入"></a>导入</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import java.util.HashMap;</span><br></pre></td></tr></table></figure>
+
+<h6 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;Integer, String&gt; Hashmap = new HashMap&lt;Integer, String&gt;();</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="三、常见方法"><a href="#三、常见方法" class="headerlink" title="三、常见方法"></a>三、常见方法</h4><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">clear()</td>
+<td align="left">删除 hashMap 中的所有键&#x2F;值对</td>
+</tr>
+<tr>
+<td align="left">clone()</td>
+<td align="left">复制一份 hashMap</td>
+</tr>
+<tr>
+<td align="left">isEmpty()</td>
+<td align="left">判断 hashMap 是否为空</td>
+</tr>
+<tr>
+<td align="left">size()</td>
+<td align="left">计算 hashMap 中键&#x2F;值对的数量</td>
+</tr>
+<tr>
+<td align="left">put()</td>
+<td align="left">将键&#x2F;值对添加到 hashMap 中</td>
+</tr>
+<tr>
+<td align="left">putAll()</td>
+<td align="left">将所有键&#x2F;值对添加到 hashMap 中</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-hashmap-putifabsent.html">putIfAbsent()</a></td>
+<td align="left">如果 hashMap 中不存在指定的键，则将指定的键&#x2F;值对插入到 hashMap 中。</td>
+</tr>
+<tr>
+<td align="left">remove()</td>
+<td align="left">删除 hashMap 中指定键 key 的映射关系</td>
+</tr>
+<tr>
+<td align="left">containKey()</td>
+<td align="left">检查 hashMap 中是否存在指定的 key 对应的映射关系。</td>
+</tr>
+<tr>
+<td align="left">containsValue()</td>
+<td align="left">检查 hashMap 中是否存在指定的 value 对应的映射关系。</td>
+</tr>
+<tr>
+<td align="left">replace()</td>
+<td align="left">替换 hashMap 中是指定的 key 对应的 value。</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-hashmap-replaceall.html">replaceAll()</a></td>
+<td align="left">将 hashMap 中的所有映射关系替换成给定的函数所执行的结果。</td>
+</tr>
+<tr>
+<td align="left">get()</td>
+<td align="left">获取指定 key 对应对 value</td>
+</tr>
+<tr>
+<td align="left">getOrDefault()</td>
+<td align="left">获取指定 key 对应对 value，如果找不到 key ，则返回设置的默认值</td>
+</tr>
+<tr>
+<td align="left">forEach()</td>
+<td align="left">对 hashMap 中的每个映射执行指定的操作。</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-hashmap-entryset.html">entrySet()</a></td>
+<td align="left">返回 hashMap 中所有映射项的集合集合视图。</td>
+</tr>
+<tr>
+<td align="left">keySet()</td>
+<td align="left">返回 hashMap 中所有 key 组成的集合视图。</td>
+</tr>
+<tr>
+<td align="left">values()</td>
+<td align="left">返回 hashMap 中存在的所有 value 值。</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-hashmap-merge.html">merge()</a></td>
+<td align="left">添加键值对到 hashMap 中</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-hashmap-compute.html">compute()</a></td>
+<td align="left">对 hashMap 中指定 key 的值进行重新计算</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-hashmap-computeifabsent.html">computeIfAbsent()</a></td>
+<td align="left">对 hashMap 中指定 key 的值进行重新计算，如果不存在这个 key，则添加到 hasMap 中</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-hashmap-computeifpresent.html">computeIfPresent()</a></td>
+<td align="left">对 hashMap 中指定 key 的值进行重新计算，前提是该 key 存在于 hashMap 中。</td>
+</tr>
+</tbody></table>
+<h4 id="四、遍历输出"><a href="#四、遍历输出" class="headerlink" title="四、遍历输出"></a>四、遍历输出</h4><h6 id="1、输出所有的key和value"><a href="#1、输出所有的key和value" class="headerlink" title="1、输出所有的key和value"></a>1、输出所有的key和value</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (Integer i : map.keySet()) &#123;	</span><br><span class="line">	            System.out.println( i + hashmap.get(i));</span><br><span class="line">	        &#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="2、仅输出所有的Value值"><a href="#2、仅输出所有的Value值" class="headerlink" title="2、仅输出所有的Value值"></a>2、仅输出所有的Value值</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (String value: Sites.values()) &#123;</span><br><span class="line">    			 System.out.print(value + &quot;, &quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h4 id="随机20个数（大小0-9），放到arraylist里面，统计每个数（0-9）各出现几次（用hashmap）"><a href="#随机20个数（大小0-9），放到arraylist里面，统计每个数（0-9）各出现几次（用hashmap）" class="headerlink" title="随机20个数（大小0-9），放到arraylist里面，统计每个数（0-9）各出现几次（用hashmap）"></a>随机20个数（大小0-9），放到arraylist里面，统计每个数（0-9）各出现几次（用hashmap）</h4><h6 id="包导入"><a href="#包导入" class="headerlink" title="包导入"></a>包导入</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">package test;</span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Collections;</span><br><span class="line">import java.util.Random;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Iterator;</span><br></pre></td></tr></table></figure>
+
+<h6 id="List存放数据"><a href="#List存放数据" class="headerlink" title="List存放数据"></a>List存放数据</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class TEST &#123;</span><br><span class="line"></span><br><span class="line">​	static ArrayList&lt;Integer&gt; saves = new ArrayList&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">​	public static void data_in() &#123;// 存放数字</span><br><span class="line">​		Random r = new Random();</span><br><span class="line">​		for (int i = 0; i &lt; 20; i++) &#123;</span><br><span class="line">​			int num = r.nextInt(10); // 0~9</span><br><span class="line">​			saves.add(num);</span><br><span class="line">​		&#125;</span><br><span class="line">​		System.out.println(saves);</span><br><span class="line">​	&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="遍历List存入hashmap"><a href="#遍历List存入hashmap" class="headerlink" title="遍历List存入hashmap"></a>遍历List存入hashmap</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public static void count() &#123;	// 计数</span><br><span class="line">	HashMap&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();</span><br><span class="line">	Iterator iterator = saves.iterator(); 	// 遍历saves</span><br><span class="line">	while (iterator.hasNext()) &#123; 	// 直到saves最后一个元素</span><br><span class="line">		Integer i = (Integer) iterator.next();	// iterator.next()值为object，需强制转换</span><br><span class="line">		if (map.containsKey(i)) 	// 如果有key则value+1否则value为1</span><br><span class="line">			map.put(i, map.get(i) + 1);</span><br><span class="line">		else</span><br><span class="line">			map.put(i, 1);		</span><br><span class="line">	&#125;		</span><br><span class="line">	 for (Integer i : map.keySet()) &#123;	//输出key和value</span><br><span class="line">            System.out.println( &quot;数字&quot;+i + &quot;出现的次数为:&quot; + map.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">​		data_in();</span><br><span class="line">​		count();</span><br><span class="line">​	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%90%86%E8%AE%BA/" rel="tag"># 理论</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/31/java%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/" rel="prev" title="java常见用法">
+      <i class="fa fa-chevron-left"></i> java常见用法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/06/blog1/" rel="next" title="centos搭建hexo博客（一）">
+      centos搭建hexo博客（一） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ArrayList"><span class="nav-number">1.</span> <span class="nav-text">ArrayList</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E5%BF%B5"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">一、概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">二、使用</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5"><span class="nav-number">1.0.0.2.0.1.</span> <span class="nav-text">导入</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.0.0.2.0.2.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">三、常用方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%8E%92%E5%BA%8F"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">四、排序</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5Collections%E7%B1%BB"><span class="nav-number">1.0.0.4.0.1.</span> <span class="nav-text">导入Collections类</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">1.0.0.4.0.2.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E9%81%8D%E5%8E%86"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">五、遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1%E3%80%81for-each%E9%81%8D%E5%8E%86"><span class="nav-number">1.0.0.5.0.1.</span> <span class="nav-text">1、for-each遍历</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2%E3%80%81%E8%BF%AD%E4%BB%A3%E5%99%A8%E9%81%8D%E5%8E%86"><span class="nav-number">1.0.0.5.0.2.</span> <span class="nav-text">2、迭代器遍历</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HashMap"><span class="nav-number">2.</span> <span class="nav-text">HashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E5%BF%B5-1"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">一、概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8-1"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">二、使用</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5-1"><span class="nav-number">2.0.0.2.0.1.</span> <span class="nav-text">导入</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA"><span class="nav-number">2.0.0.2.0.2.</span> <span class="nav-text">创建</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95"><span class="nav-number">2.0.0.3.</span> <span class="nav-text">三、常见方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%81%8D%E5%8E%86%E8%BE%93%E5%87%BA"><span class="nav-number">2.0.0.4.</span> <span class="nav-text">四、遍历输出</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1%E3%80%81%E8%BE%93%E5%87%BA%E6%89%80%E6%9C%89%E7%9A%84key%E5%92%8Cvalue"><span class="nav-number">2.0.0.4.0.1.</span> <span class="nav-text">1、输出所有的key和value</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2%E3%80%81%E4%BB%85%E8%BE%93%E5%87%BA%E6%89%80%E6%9C%89%E7%9A%84Value%E5%80%BC"><span class="nav-number">2.0.0.4.0.2.</span> <span class="nav-text">2、仅输出所有的Value值</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">例题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA20%E4%B8%AA%E6%95%B0%EF%BC%88%E5%A4%A7%E5%B0%8F0-9%EF%BC%89%EF%BC%8C%E6%94%BE%E5%88%B0arraylist%E9%87%8C%E9%9D%A2%EF%BC%8C%E7%BB%9F%E8%AE%A1%E6%AF%8F%E4%B8%AA%E6%95%B0%EF%BC%880-9%EF%BC%89%E5%90%84%E5%87%BA%E7%8E%B0%E5%87%A0%E6%AC%A1%EF%BC%88%E7%94%A8hashmap%EF%BC%89"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">随机20个数（大小0-9），放到arraylist里面，统计每个数（0-9）各出现几次（用hashmap）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8C%85%E5%AF%BC%E5%85%A5"><span class="nav-number">3.0.0.1.0.1.</span> <span class="nav-text">包导入</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#List%E5%AD%98%E6%94%BE%E6%95%B0%E6%8D%AE"><span class="nav-number">3.0.0.1.0.2.</span> <span class="nav-text">List存放数据</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%81%8D%E5%8E%86List%E5%AD%98%E5%85%A5hashmap"><span class="nav-number">3.0.0.1.0.3.</span> <span class="nav-text">遍历List存入hashmap</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%B0%83%E7%94%A8"><span class="nav-number">3.0.0.1.0.4.</span> <span class="nav-text">调用</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="AlexQFMM"
+      src="/images/Avatar.jpg">
+  <p class="site-author-name" itemprop="name">AlexQFMM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://qexo-ten-roan.vercel.app/" title="控制中心 → https:&#x2F;&#x2F;qexo-ten-roan.vercel.app&#x2F;" rel="noopener" target="_blank">控制中心</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AlexQFMM</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'UaEUwcYLlkREnSn9jPNe0oRf-gzGzoHsz',
+      appKey     : '5d7KwGdf31jiCBxBobH0wVk6',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/assets/miku.model.json"},"display":{"position":"left","width":200,"height":400},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
